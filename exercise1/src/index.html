@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+        <script>
+            if (!window.customElements) {
+                document.write("<!--");
+            }
+        </script>
+        <script src="node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+        <!-- ! DO NOT REMOVE THIS COMMENT, WE NEED ITS CLOSING MARKER -->
+
+        <title>Subjektive Wahrnehmung der Größen verschiedener Formen</title>
+        <script src="src/data.js"></script>
+        <script type="module" src="src/index.js"></script>
+    </head>
+
+    <body>
+        <estimation-prompt standard="1" question="Schätzen Sie das Verhältnis der beiden Flächen."></estimation-prompt>
+        <canvas id="canvas" width="400" height="200"></canvas>
+    </body>
+</html>
