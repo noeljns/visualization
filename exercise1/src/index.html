@@ -17,9 +17,22 @@
         <script src="src/data.js"></script>
         <script type="module" src="src/index.js"></script>
     </head>
+    <style>
+        #estimation-prompt {
+            display: none;
+        }
+        #canvas {
+            display: none;
+        }
+    </style>
 
     <body>
-        <estimation-prompt standard="1" question="Schätzen Sie das Verhältnis der beiden Flächen."></estimation-prompt>
+        <div id="shape-selection">
+            <h2>Welche Form wollen Sie zuerst schätzen?</h2>
+            <vaadin-button id="circle">Kreis</vaadin-button>
+            <vaadin-button id="square">Quadrat</vaadin-button>
+        </div>
+        <estimation-prompt id="estimation-prompt"></estimation-prompt>
         <canvas id="canvas" width="400" height="200"></canvas>
     </body>
 </html>

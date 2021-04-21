@@ -8,7 +8,7 @@ template.innerHTML = `
 
     </style>
     <div class="wrapper">
-        <h2 id="question"></h2>
+        <h2 id="instruction"></h2>
         <div id="answer">
             <span id="standard"></span> :
             <vaadin-number-field id="estimation" label="Estimation" step="1" min="1" has-controls required=true>
@@ -26,19 +26,19 @@ class EstimationPrompt extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
         this.standardText = this.shadowRoot.querySelector("#standard");
-        this.questionText = this.shadowRoot.querySelector("#question");
+        this.instructionText = this.shadowRoot.querySelector("#instruction");
     }
 
     static get observedAttributes() {
-        return ["question", "standard"];
+        return ["instruction", "standard"];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue) {
             switch (name) {
-                case "question":
-                    this.question = newValue;
-                    this.questionText.innerHTML = this.question;
+                case "instruction":
+                    this.instruction = newValue;
+                    this.instructionText.innerHTML = this.instruction;
                     break;
                 case "standard":
                     this.standard = newValue;

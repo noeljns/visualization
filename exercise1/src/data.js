@@ -1,5 +1,6 @@
 const data = {
     circle: {
+        instruction: "Schätzen Sie das Verhältnis der beiden Kreise.",
         rounds: [
             {
                 standard: 1,
@@ -20,6 +21,7 @@ const data = {
         ],
     },
     square: {
+        instruction: "Schätzen Sie das Verhältnis der beiden Quadrate.",
         rounds: [
             {
                 standard: 1,
