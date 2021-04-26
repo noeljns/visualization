@@ -8,4 +8,4 @@ estimate relations of circles and rectangles
 $ npm install
 
 # serve at localhost:8080
-$ npm run devv
+$ npm run dev
