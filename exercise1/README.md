@@ -1,4 +1,4 @@
-# exercise 1: estimate relationas of circles and rectangles
+# exercise 1: estimate relations of circles and rectangles
 
 ## Build Setup
 
