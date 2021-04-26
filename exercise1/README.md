@@ -1,4 +1,5 @@
-# exercise 1: estimate relations of circles and rectangles
+# exercise 1
+estimate relations of circles and rectangles
 
 ## Build Setup
 
@@ -6,5 +7,5 @@
 # install dependencies
 $ npm install
 
-# serve at localhost:8000
+# serve at localhost:8080
 $ npm run devv
