@@ -17,9 +17,23 @@
         <script src="src/data.js"></script>
         <script type="module" src="src/index.js"></script>
     </head>
-
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            font-family: "Roboto", sans-serif;
+        }
+        .container {
+            margin-top: 100px;
+            padding: 80px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 10px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
     <body>
-        <estimation-prompt id="estimation-prompt"></estimation-prompt>
-        <canvas id="canvas" width="500" height="200"></canvas>
+        <div class="container">
+            <estimation-prompt id="estimation-prompt"></estimation-prompt>
+            <canvas id="canvas" width="500" height="200"></canvas>
+        </div>
     </body>
 </html>
