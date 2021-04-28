@@ -11,9 +11,9 @@ template.innerHTML = `
         <h2 id="instruction"></h2>
         <div id="answer">
             <span id="standard"></span> :
-            <vaadin-number-field id="estimation" label="Estimation" step="1" min="1" has-controls required=true>
+            <vaadin-number-field id="estimation" label="Verhältnis" step="1" min="1" has-controls required=true>
             </vaadin-number-field>
-            <vaadin-button>Submit</vaadin-button>
+            <vaadin-button id="next">Nächste</vaadin-button>
         </div>
     </div>
     `;
@@ -27,6 +27,8 @@ class EstimationPrompt extends HTMLElement {
 
         this.standardText = this.shadowRoot.querySelector("#standard");
         this.instructionText = this.shadowRoot.querySelector("#instruction");
+        this.estimationField = this.shadowRoot.querySelector("#estimation");
+        this.shadowRoot.querySelector("#next").addEventListener("click", () => this.nextButtonClicked());
     }
 
     static get observedAttributes() {
@@ -39,12 +41,20 @@ class EstimationPrompt extends HTMLElement {
                 case "instruction":
                     this.instruction = newValue;
                     this.instructionText.innerHTML = this.instruction;
+                    this.estimationField.value = 1;
                     break;
                 case "standard":
                     this.standard = newValue;
                     this.standardText.innerHTML = this.standard;
+                    this.estimationField.value = 1;
                     break;
             }
+        }
+    }
+
+    nextButtonClicked() {
+        if (!this.estimationField.invalid) {
+            this.dispatchEvent(new CustomEvent("next-clicked", { detail: { estimation: this.estimationField.value } }));
         }
     }
 }
