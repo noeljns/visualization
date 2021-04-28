@@ -3,58 +3,56 @@ import "./custom-elements/estimation-prompt";
 window.addEventListener("load", () => {
     initUI();
 });
-let estimationPrompt, shapeSelection, canvas;
+let estimationPrompt, canvas;
+const STANDARD = 1;
+const STANDARD_RADIUS = 20;
+const STANDARD_SITE_LENGTH = 30;
 
 function initUI() {
     estimationPrompt = document.getElementById("estimation-prompt");
-    shapeSelection = document.getElementById("shape-selection");
     canvas = document.getElementById("canvas");
-
-    //add event listeners
-    document.getElementById("circle").addEventListener("click", () => {
-        nextRound("circle", 0);
-    });
-    document.getElementById("square").addEventListener("click", () => {
-        nextRound("square", 0);
-    });
-    document.getElementById("square");
+    nextRound("square", 0);
 }
 
 function nextRound(shape, round) {
-    if (round < data[shape].rounds.length) {
-        if (round === 0) {
-            shapeSelection.style.display = "none";
-            estimationPrompt.style.display = "block";
-            canvas.style.display = "block";
-        }
-        let standard = data[shape].rounds[round].standard;
-        let comparison = data[shape].rounds[round].comparison;
-        estimationPrompt.setAttribute("standard", standard);
-        estimationPrompt.setAttribute("instruction", data[shape].instruction);
+    if (round < data.rounds.length) {
+        let comparison = data.rounds[round];
+        estimationPrompt.setAttribute("standard", STANDARD);
+        estimationPrompt.setAttribute("instruction", data.instructions[shape]);
         switch (shape) {
             case "circle":
-                drawCircles(standard, comparison);
+                drawCircles(comparison);
                 break;
             case "square":
-                drawSquares(standard, comparison);
+                drawSquares(comparison);
                 break;
         }
     }
 }
 
-function drawCircles(standard, comparison) {
+function drawCircles(comparison) {
     var c = document.getElementById("canvas");
     var ctx = c.getContext("2d");
     ctx.beginPath();
-    ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+    ctx.arc(40, 120, STANDARD_RADIUS, 0, 2 * Math.PI);
+    ctx.fillStyle = "green";
+    ctx.fill();
+    let radius = Math.sqrt(comparison) * STANDARD_RADIUS;
+    ctx.beginPath();
+    ctx.arc(80 + radius, 120, radius, 0, 2 * Math.PI);
     ctx.fillStyle = "green";
     ctx.fill();
 }
-function drawSquares() {
+function drawSquares(comparison) {
     var c = document.getElementById("canvas");
     var ctx = c.getContext("2d");
     ctx.beginPath();
-    ctx.rect(150, 150, 50, 50);
+    ctx.rect(40, 60, STANDARD_SITE_LENGTH, STANDARD_SITE_LENGTH);
+    ctx.fillStyle = "green";
+    ctx.fill();
+    let siteLength = Math.sqrt(comparison) * STANDARD_SITE_LENGTH;
+    ctx.beginPath();
+    ctx.rect(80, 60, siteLength, siteLength);
     ctx.fillStyle = "green";
     ctx.fill();
 }
