@@ -16,6 +16,7 @@
         <title>Subjektive Wahrnehmung der Größen verschiedener Formen</title>
         <script src="src/data.js"></script>
         <script type="module" src="src/index.js"></script>
+        <script src="https://d3js.org/d3.v4.js"></script>
     </head>
     <style>
         body {
@@ -29,11 +30,17 @@
             border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 10px 12px rgba(0, 0, 0, 0.15);
         }
+        #barplot-container {
+            display: none;
+        }
     </style>
     <body>
-        <div class="container">
+        <div id="estimation-container" class="container">
             <estimation-prompt id="estimation-prompt"></estimation-prompt>
             <canvas id="canvas" width="500" height="200"></canvas>
+        </div>
+        <div id="barplot-container" class="container">
+            <div id="barplot"></div>
         </div>
     </body>
 </html>
