@@ -2,6 +2,10 @@
 
 Estimate relations of circles and rectangles
 
+## Demo
+
+[Demo on Firebase](https://perceived-surface-area.web.app/)
+
 ## Run locally
 
 ```bash
