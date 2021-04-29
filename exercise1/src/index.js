@@ -10,6 +10,13 @@ let results = [];
 const STANDARD = 1;
 const STANDARD_RADIUS = 20;
 const STANDARD_SITE_LENGTH = 30;
+const data = {
+    instructions: {
+        circle: "Schätzen Sie das Verhältnis der beiden Kreise.",
+        square: "Schätzen Sie das Verhältnis der beiden Quadrate.",
+    },
+    rounds: [2, 10, 3, 8, 5],
+};
 
 function initUI() {
     estimationPrompt = document.getElementById("estimation-prompt");
