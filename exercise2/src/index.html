@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+
+        <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+        <script>
+            if (!window.customElements) {
+                document.write("<!--");
+            }
+        </script>
+        <script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+        <!-- ! DO NOT REMOVE THIS COMMENT, WE NEED ITS CLOSING MARKER -->
+
+        <title>Webcomponents Boilerplate</title>
+        <script src="index.js"></script>
+    </head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            font-family: "Roboto", sans-serif;
+        }
+        .container {
+            margin-top: 100px;
+            padding: 80px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 10px 12px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+
+    <body>
+        <div class="container">
+            <test-element instruction="Sehen Sie den roten Kreis?"></test-element>
+        </div>
+    </body>
+</html>
