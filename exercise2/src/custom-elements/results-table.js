@@ -21,23 +21,13 @@ class ResultsTable extends HTMLElement {
         this.table = this.shadowRoot.querySelector("#table");
     }
 
-    static get observedAttributes() {
-        return ["data"];
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue !== newValue) {
-            switch (name) {
-                case "data":
-                    this.data = newValue;
-                    this.table.innerHTML += " " + this.data.toString();
-                    break;
-            }
-        }
+    setData(results) {
+        this.data = results;
     }
 
     showTable() {
         this.table.innerHTML = "this is the table";
+        this.table.innerHTML += " " + this.data[0].options[0];
     }
 }
 
