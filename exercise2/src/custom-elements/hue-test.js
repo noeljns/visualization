@@ -2,17 +2,8 @@ const template = document.createElement("template");
 
 template.innerHTML = `
     <style>
-    #canvas {
-        background-color: green;
-        display: none;
-    }
-    #roundDisplay {
-        margin-left: 420px;
-    }
     </style>
     <div class="wrapper">
-        <div><span id="timeDisplay"></span><span id="roundDisplay"></span></div>
-
         <test-element id="test-element"></test-element>
     </div>
     `;
@@ -25,11 +16,11 @@ class HueTest extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-        this.timeDisplay = this.shadowRoot.querySelector("#timeDisplay");
-        this.roundDisplay = this.shadowRoot.querySelector("#roundDisplay");
+        this.radius = 13;
 
         this.testElement = this.shadowRoot.querySelector("#test-element");
         this.testElement.addEventListener("start-test", this.startTest.bind(this));
+        this.testElement.addEventListener("test-done", this.testDone.bind(this));
     }
 
     static get observedAttributes() {
@@ -45,19 +36,78 @@ class HueTest extends HTMLElement {
                     break;
                 case "time":
                     this.time = newValue;
-                    this.timeDisplay.innerHTML = "Zeit: " + this.time + "ms";
+                    this.testElement.setAttribute("time", newValue);
                     break;
                 case "round":
                     this.round = newValue;
-                    this.roundDisplay.innerHTML = "Runde: " + this.round;
+                    this.testElement.setAttribute("round", newValue);
                     break;
             }
         }
     }
 
     startTest() {
-        console.log("here");
+        this.testElement.clearCanvas();
+        this.targetPosition = this.drawTarget();
+        this.drawDistractors(this.targetPosition, this.round);
         this.testElement.showCanvas(this.time);
+    }
+
+    testDone(evt) {
+        console.log(evt);
+        //TODO: check if position was selected correctly
+        //if it was not correct, send found: false else found: true
+        this.dispatchEvent(
+            new CustomEvent("test-done", {
+                composed: true,
+                detail: { found: true },
+            })
+        );
+    }
+
+    drawTarget() {
+        let ctx = this.testElement.getContext();
+        let pos = this.testElement.getRandomTargetPosition(this.radius * 2, this.radius * 2);
+        this.drawCircle(pos, "red", ctx);
+        return pos;
+    }
+
+    drawDistractors(targetPos, round) {
+        let colors, amountOfDistractors;
+        let ctx = this.testElement.getContext();
+        switch (round) {
+            case "1":
+                colors = ["blue"];
+                amountOfDistractors = 10;
+                break;
+            case "2":
+                colors = ["blue", "green"];
+                amountOfDistractors = 20;
+                break;
+            case "3":
+                colors = ["blue", "green", "yellow", "orange"];
+                amountOfDistractors = 30;
+                break;
+            default:
+                colors = ["blue"];
+                amountOfDistractors = 10;
+        }
+        let distractorPositions = this.testElement.getRandomDistractorPositions(
+            amountOfDistractors,
+            this.radius * 2,
+            this.radius * 2,
+            targetPos
+        );
+        for (let i = 0; i < distractorPositions.length; i++) {
+            this.drawCircle(distractorPositions[i], colors[i % colors.length], ctx);
+        }
+    }
+
+    drawCircle(pos, color, ctx) {
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, this.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
     }
 }
 

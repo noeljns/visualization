@@ -4,9 +4,12 @@ const template = document.createElement("template");
 
 template.innerHTML = `
     <style>
+        #roundDisplay {
+        margin-left: 420px;
+    }
     #canvas {
-        background-color: green;
         display: none;
+        border: 1px solid grey;
     }
     #evaluation{
         display: none;
@@ -23,6 +26,7 @@ template.innerHTML = `
     }
     </style>
     <div class="wrapper">
+        <div><span id="timeDisplay"></span><span id="roundDisplay"></span></div>
         <h2 id="instruction"></h2>
         <canvas id="canvas"></canvas>
         <vaadin-button id="startBtn">Start</vaadin-button>
@@ -44,16 +48,26 @@ class TestElement extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
+        this.timeDisplay = this.shadowRoot.querySelector("#timeDisplay");
+        this.roundDisplay = this.shadowRoot.querySelector("#roundDisplay");
         this.instructionText = this.shadowRoot.querySelector("#instruction");
         this.evaluation = this.shadowRoot.querySelector("#evaluation");
         this.canvas = this.shadowRoot.querySelector("#canvas");
 
         this.startBtn = this.shadowRoot.querySelector("#startBtn");
         this.startBtn.addEventListener("click", this._startButtonClicked);
+        this.shadowRoot.querySelector("#notSeen").addEventListener("click", this._notSeen.bind(this));
+        this.shadowRoot.querySelector("#topLeft").addEventListener("click", this._topLeft.bind(this));
+        this.shadowRoot.querySelector("#topRight").addEventListener("click", this._topRight.bind(this));
+        this.shadowRoot.querySelector("#bottomLeft").addEventListener("click", this._bottomLeft.bind(this));
+        this.shadowRoot.querySelector("#bottomRight").addEventListener("click", this._bottomRight.bind(this));
+        this.canvas.width = 600;
+        this.canvas.height = 300;
+        this.clearCanvas();
     }
 
     static get observedAttributes() {
-        return ["instruction"];
+        return ["instruction", "time", "round"];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -63,6 +77,14 @@ class TestElement extends HTMLElement {
                     this.instruction = newValue;
                     this.instructionText.innerHTML = this.instruction;
                     break;
+                case "time":
+                    this.time = newValue;
+                    this.timeDisplay.innerHTML = "Zeit: " + this.time + "ms";
+                    break;
+                case "round":
+                    this.round = newValue;
+                    this.roundDisplay.innerHTML = "Runde: " + this.round;
+                    break;
             }
         }
     }
@@ -70,17 +92,103 @@ class TestElement extends HTMLElement {
         return this.canvas.getContext("2d");
     }
 
-    getPositionsOfDistractors(quantity) {}
+    clearCanvas() {
+        var ctx = this.canvas.getContext("2d");
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.beginPath();
+        ctx.moveTo(this.canvas.width / 2, 0);
+        ctx.lineTo(this.canvas.width / 2, this.canvas.height);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, this.canvas.height / 2);
+        ctx.lineTo(this.canvas.width, this.canvas.height / 2);
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        console.log(this.canvas.width);
+    }
 
-    getTargetPosition() {}
+    getRandomDistractorPositions(quantity, distractorWidth, distractorHeight, targetPos) {
+        let distractorPadding;
+        let distractorPositions = [];
+        distractorWidth > distractorHeight
+            ? (distractorPadding = distractorWidth)
+            : (distractorPadding = distractorHeight);
+        for (let i = 0; i < quantity; i++) {
+            let newPos = this.getRandomPosition(distractorPadding);
+            while (this.isOverlapping(newPos, [...distractorPositions, targetPos], distractorPositions)) {
+                newPos = this.getRandomPosition(distractorPadding);
+            }
+            distractorPositions.push(newPos);
+        }
+        return distractorPositions;
+    }
+    getRandomPosition(padding) {
+        let x = Math.floor(Math.random() * (this.canvas.width - padding));
+        let y = Math.floor(Math.random() * (this.canvas.height - padding));
+        return { x: x, y: y };
+    }
+
+    isOverlapping(pos, positionsToCheck, padding) {
+        //dont overlap with other distractors
+        //dont overlap with the target
+        return false;
+    }
+
+    getRandomTargetPosition(targetWidth, targetHeight) {
+        let targetPadding;
+        targetWidth > targetHeight ? (targetPadding = targetWidth) : (targetPadding = targetHeight);
+        let x = Math.floor(Math.random() * (this.canvas.width - targetPadding * 2)) + targetPadding;
+        if (x < this.canvas.width / 2 + targetPadding && x > this.canvas.width / 2 - targetPadding) {
+            if (x > this.canvas.width / 2) {
+                x += targetPadding;
+            } else {
+                x -= targetPadding;
+            }
+        }
+        let y = Math.floor(Math.random() * (this.canvas.height - targetPadding * 2)) + targetPadding;
+        if (y < this.canvas.height / 2 + targetPadding && y > this.canvas.height / 2 - targetPadding) {
+            if (y > this.canvas.height / 2) {
+                y += targetPadding;
+            } else {
+                y -= targetPadding;
+            }
+        }
+        return { x: x, y: y };
+    }
 
     showCanvas(time) {
+        //TODO: Add countdown
         this.canvas.style.display = "block";
         this.startBtn.style.display = "none";
         setTimeout(() => {
             this.canvas.style.display = "none";
             this.evaluation.style.display = "flex";
         }, time);
+    }
+
+    _notSeen() {
+        this._dispatchTestDoneEvent({ result: "not-seen" });
+    }
+    _topRight() {
+        this._dispatchTestDoneEvent({ result: "top-right" });
+    }
+    _topLeft() {
+        this._dispatchTestDoneEvent({ result: "top-left" });
+    }
+    _bottomLeft() {
+        this._dispatchTestDoneEvent({ result: "bottom-left" });
+    }
+    _bottomRight() {
+        this._dispatchTestDoneEvent({ result: "bottom-right" });
+    }
+
+    _dispatchTestDoneEvent(detail) {
+        this.dispatchEvent(
+            new CustomEvent("test-done", {
+                composed: true,
+                detail,
+            })
+        );
     }
 
     _startButtonClicked() {
