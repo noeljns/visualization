@@ -27,6 +27,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "@vaadin/vaadin-button": "^2.4.0"
+    "@vaadin/vaadin-button": "^2.4.0",
+    "@vaadin/vaadin-grid": "^6.0.2"
   }
 }
