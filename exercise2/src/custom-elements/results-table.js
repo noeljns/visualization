@@ -2,14 +2,29 @@ import "@vaadin/vaadin-grid";
 const template = document.createElement("template");
 
 template.innerHTML = `
+<dom-module id="my-grid-styles" theme-for="vaadin-grid">
+<template>
+  <style>
+    [part~="body-cell"].green {
+      background: rgb(230, 245, 226);
+    }
+
+    [part~="body-cell"].red {
+      background: rgb(255, 240, 240);
+    }
+
+  </style>
+</template>
+</dom-module>
+
     <style>
     </style>
 
     <div class="wrapper">
         Results Table
         <vaadin-grid id="table">
-            <vaadin-grid-column></vaadin-grid-column>
-            <vaadin-grid-column></vaadin-grid-column>
+            <vaadin-grid-column width="170px"></vaadin-grid-column>
+            <vaadin-grid-column width="160px"></vaadin-grid-column>
             <vaadin-grid-column></vaadin-grid-column>
             <vaadin-grid-column></vaadin-grid-column>
             <vaadin-grid-column></vaadin-grid-column>
@@ -75,7 +90,12 @@ class ResultsTable extends HTMLElement {
         };
     }
 
-    showTable() {
+    colorTable() {
+        this.table.cellClassNameGenerator = function(column, model) {
+            let classes = model.item.longest == 'true' ? 'green' : 'red';
+            return classes;
+        }
+
     }
 }
 

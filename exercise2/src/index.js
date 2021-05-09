@@ -33,7 +33,7 @@ function initUI() {
     resultsTable.setData(dummy_data);
     hueTest.setAttribute("round", currentRound);
     hueTest.addEventListener("test-done", nextRound);
-    resultsTable.showTable();
+    resultsTable.colorTable();
 }
 
 function nextRound(evt) {
