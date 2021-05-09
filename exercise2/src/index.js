@@ -14,43 +14,16 @@ let currentRound = 1;
 
 // dummy data
 var dummy_data = [
-    {options: ["colour"], time: 1000, distractor_rank: 1, found: true},
-    {options: ["colour"], time: 500, distractor_rank: 1, found: true},
-    {options: ["colour"], time: 250, distractor_rank: 1, found: true},
-    {options: ["colour"], time: 125, distractor_rank: 1, found: true},
-    {options: ["colour"], time: 1000, distractor_rank: 2, found: true},
-    {options: ["colour",], time: 500, distractor_rank: 2, found: true},
-    {options: ["colour"], time: 250, distractor_rank: 2, found: true},
-    {options: ["colour"], time: 125, distractor_rank: 2, found: false},
-    {options: ["colour"], time: 1000, distractor_rank: 3, found: true},
-    {options: ["colour"], time: 500, distractor_rank: 3, found: true},
-    {options: ["colour"], time: 250, distractor_rank: 3, found: false},
-    {options: ["colour"], time: 125, distractor_rank: 3, found: false},
-    {options: ["closure"], time: 1000, distractor_rank: 1, found: true},
-    {options: ["closure"], time: 500, distractor_rank: 1, found: true},
-    {options: ["closure"], time: 250, distractor_rank: 1, found: true},
-    {options: ["closure"], time: 125, distractor_rank: 1, found: false},
-    {options: ["closure"], time: 1000, distractor_rank: 2, found: true},
-    {options: ["closure",], time: 500, distractor_rank: 2, found: true},
-    {options: ["closure"], time: 250, distractor_rank: 2, found: false},
-    {options: ["closure"], time: 125, distractor_rank: 2, found: false},
-    {options: ["closure"], time: 1000, distractor_rank: 3, found: true},
-    {options: ["closure"], time: 500, distractor_rank: 3, found: false},
-    {options: ["closure"], time: 250, distractor_rank: 3, found: false},
-    {options: ["closure"], time: 125, distractor_rank: 3, found: false},
-    {options: ["colour", "closure"], time: 1000, distractor_rank: 1, found: true},
-    {options: ["colour", "closure"], time: 500, distractor_rank: 1, found: true},
-    {options: ["colour", "closure"], time: 250, distractor_rank: 1, found: false},
-    {options: ["colour", "closure"], time: 125, distractor_rank: 1, found: true},
-    {options: ["colour", "closure"], time: 1000, distractor_rank: 2, found: true},
-    {options: ["colour", "closure"], time: 500, distractor_rank: 2, found: false},
-    {options: ["colour", "closure"], time: 250, distractor_rank: 2, found: false},
-    {options: ["colour", "closure"], time: 125, distractor_rank: 2, found: true},
-    {options: ["colour", "closure"], time: 1000, distractor_rank: 3, found: true},
-    {options: ["colour", "closure"], time: 500, distractor_rank: 3, found: false},
-    {options: ["colour", "closure"], time: 250, distractor_rank: 3, found: false},
-    {options: ["colour", "closure"], time: 125, distractor_rank: 3, found: false}
-    ];    
+    {'options': 'colour', 'distractor_rank': '1', 'longest': 'true', 'long': 'true', 'short': 'true', 'shortest': 'true'},
+    {'options': 'colour', 'distractor_rank': '2', 'longest': 'true', 'long': 'true', 'short': 'false', 'shortest': 'false'},
+    {'options': 'colour', 'distractor_rank': '3', 'longest': 'true', 'long': 'false', 'short': 'false', 'shortest': 'false'},
+    {'options': 'closure', 'distractor_rank': '1', 'longest': 'true', 'long': 'true', 'short': 'true', 'shortest': 'true'},
+    {'options': 'closure', 'distractor_rank': '2', 'longest': 'true', 'long': 'false', 'short': 'false', 'shortest': 'false'},
+    {'options': 'closure', 'distractor_rank': '3', 'longest': 'true', 'long': 'false', 'short': 'false', 'shortest': 'false'},
+    {'options': 'colour and closure', 'distractor_rank': '1', 'longest': 'true', 'long': 'true', 'short': 'false', 'shortest': 'false'},
+    {'options': 'colour and closure', 'distractor_rank': '2', 'longest': 'false', 'long': 'true', 'short': 'false', 'shortest': 'false'},
+    {'options': 'colour and closure', 'distractor_rank': '3', 'longest': 'false', 'long': 'false', 'short': 'false', 'shortest': 'false'}
+];
 
 function initUI() {
     currentTime = STARTING_TIME;

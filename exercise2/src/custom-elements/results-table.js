@@ -12,6 +12,8 @@ template.innerHTML = `
             <vaadin-grid-column></vaadin-grid-column>
             <vaadin-grid-column></vaadin-grid-column>
             <vaadin-grid-column></vaadin-grid-column>
+            <vaadin-grid-column></vaadin-grid-column>
+            <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
     </div>
     `;
@@ -25,46 +27,56 @@ class ResultsTable extends HTMLElement {
         this.table = this.shadowRoot.querySelector("#table");
     }
 
-    setData(measurements) {
-        this.results = this.getResultObjects(measurements);
-        //TODO: before setting the data for the table it has to be grouped and brought in the right format for the table since we decided to display the data differently.
-        this.table.items = this.results;
+    setData(results) {
+        this.table.items = results;
+
         const columns = this.table.querySelectorAll("vaadin-grid-column");
 
         columns[0].headerRenderer = function (root) {
-            root.textContent = "1000ms";
+            root.textContent = "Eigenschaften";
         };
         columns[0].renderer = function (root, column, model) {
-            root.textContent = model.item.found;
+            root.textContent = model.item.options;
         };
 
         columns[1].headerRenderer = function (root) {
-            root.textContent = "500ms";
+            root.textContent = "Distraktoren Stufe";
         };
         columns[1].renderer = function (root, column, model) {
-            root.textContent = model.item.found;
+            root.textContent = model.item.distractor_rank;
         };
-        console.log(this.results);
+
+        columns[2].headerRenderer = function (root) {
+            root.textContent = "1000 ms";
+        };
+        columns[2].renderer = function (root, column, model) {
+            root.textContent = model.item.longest;
+        };
+
+        columns[3].headerRenderer = function (root) {
+            root.textContent = "500 ms";
+        };
+        columns[3].renderer = function (root, column, model) {
+            root.textContent = model.item.long;
+        };
+
+        columns[4].headerRenderer = function (root) {
+            root.textContent = "250 ms";
+        };
+        columns[4].renderer = function (root, column, model) {
+            root.textContent = model.item.short;
+        };
+
+        columns[5].headerRenderer = function (root) {
+            root.textContent = "125 ms";
+        };
+        columns[5].renderer = function (root, column, model) {
+            root.textContent = model.item.shortest;
+        };
     }
 
-    getResultObjects(data) {
-        var array = [];
-
-        for (const ele of data) {
-            const result = new Result(ele.options, ele.time, ele.distractor_rank, ele.found);
-            array.push(result);
-        }
-        return array;
+    showTable() {
     }
 }
 
 customElements.define("results-table", ResultsTable);
-
-class Result {
-    constructor(options, time, distractor_rank, found) {
-        this.options = options;
-        this.time = time;
-        this.distractor_rank = distractor_rank;
-        this.found = found;
-    }
-}
