@@ -54,6 +54,8 @@ class TestElement extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
+        this.countDownTime = 200;
+
         this.timeDisplay = this.shadowRoot.querySelector("#timeDisplay");
         this.roundDisplay = this.shadowRoot.querySelector("#roundDisplay");
         this.instructionText = this.shadowRoot.querySelector("#instruction");
@@ -187,7 +189,8 @@ class TestElement extends HTMLElement {
 
     showCanvas(time) {
         this.startBtn.style.display = "none";
-        this.countdown.style.block = "none";
+        this.evaluation.style.display = "none";
+        this.countdown.style.display = "block";
         this.countdown.innerHTML = "3";
         setTimeout(() => {
             this.countdown.innerHTML = "2";
@@ -200,13 +203,9 @@ class TestElement extends HTMLElement {
                         this.canvas.style.display = "none";
                         this.evaluation.style.display = "flex";
                     }, time);
-                }, 1000);
-            }, 1000);
-        }, 1000);
-
-        //timeout , set 2
-        //timepout, set 3
-        //hide
+                }, this.countDownTime);
+            }, this.countDownTime);
+        }, this.countDownTime);
     }
 
     _notSeen() {

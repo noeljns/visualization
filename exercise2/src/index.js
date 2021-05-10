@@ -6,16 +6,19 @@ window.addEventListener("load", () => {
     initUI();
 });
 
-let hueTest, resultsTable;
 const STARTING_TIME = 1000;
 const MIN_TIME = 125;
-let currentTime;
+const EXPERIMENTS = [{ element: "hue-test", name: "Farbe", instruction: "Wo ist der rote Kreis?" }];
+let experimentContainer, resultsTable;
+let currentExperiment = 0;
+let currentTime = STARTING_TIME;
 let currentRound = 1;
+let currentTestElement = {};
 let currentTestRound = {};
 let data = [];
 
 // dummy data
-var dummy_data = [
+let dummy_data = [
     { options: "colour", distractor_rank: "1", 1000: "true", 500: "true", 250: "true", 125: "true" },
     { options: "colour", distractor_rank: "2", 1000: "true", 500: "true", 250: "false", 125: "false" },
     { options: "colour", distractor_rank: "3", 1000: "true", 500: "false", 250: "false", 125: "false" },
@@ -28,30 +31,50 @@ var dummy_data = [
 ];
 
 function initUI() {
-    currentTime = STARTING_TIME;
-    hueTest = document.getElementById("hue-test");
+    experimentContainer = document.getElementById("experimentContainer");
     resultsTable = document.getElementById("resultsTable");
-    hueTest.setAttribute("time", STARTING_TIME);
-    resultsTable.setData(dummy_data);
-    hueTest.setAttribute("round", currentRound);
-    currentTestRound = { options: "colour", distractor_rank: currentRound };
-    hueTest.addEventListener("test-done", nextRound);
-    resultsTable.colorTable();
+    startNewExperiment(EXPERIMENTS[currentExperiment]);
+}
+
+function startNewExperiment(experiment) {
+    currentTime = STARTING_TIME;
+    currentRound = 1;
+    while (experimentContainer.firstChild) {
+        experimentContainer.removeChild(parent.firstChild);
+    }
+    currentTestElement = document.createElement(experiment.element);
+    currentTestElement.setAttribute("time", currentTime);
+    currentTestElement.setAttribute("round", currentRound);
+    currentTestElement.setAttribute("instruction", experiment.instruction);
+    currentTestElement.addEventListener("test-done", nextRound);
+    experimentContainer.appendChild(currentTestElement);
+    currentTestRound = { options: experiment.name, distractor_rank: currentRound };
 }
 
 function nextRound(evt) {
     currentTestRound[currentTime] = evt.detail.found;
     if (currentTime > MIN_TIME) {
         currentTime = currentTime / 2;
-        hueTest.setAttribute("time", currentTime);
-        hueTest.startTest();
+        currentTestElement.setAttribute("time", currentTime);
+        currentTestElement.startTest();
+    } else if (currentRound === 3) {
+        data.push(currentTestRound);
+        if (currentExperiment < EXPERIMENTS.length - 1) {
+            currentExperiment++;
+            startNewExperiment(EXPERIMENTS[currentExperiment]);
+        } else {
+            resultsTable.parentNode.style.display = "block";
+            experimentContainer.style.display = "none";
+            resultsTable.setData(data);
+            resultsTable.colorTable();
+        }
     } else {
         data.push(currentTestRound);
         console.log(data);
         currentRound++;
-        hueTest.setAttribute("round", currentRound);
+        currentTestElement.setAttribute("round", currentRound);
         currentTime = STARTING_TIME;
-        hueTest.setAttribute("time", currentTime);
-        hueTest.startTest();
+        currentTestElement.setAttribute("time", currentTime);
+        currentTestElement.startTest();
     }
 }
