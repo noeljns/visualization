@@ -14,15 +14,15 @@ let currentRound = 1;
 
 // dummy data
 var dummy_data = [
-    {'options': 'colour', 'distractor_rank': '1', 'longest': 'true', 'long': 'true', 'short': 'true', 'shortest': 'true'},
-    {'options': 'colour', 'distractor_rank': '2', 'longest': 'true', 'long': 'true', 'short': 'false', 'shortest': 'false'},
-    {'options': 'colour', 'distractor_rank': '3', 'longest': 'true', 'long': 'false', 'short': 'false', 'shortest': 'false'},
-    {'options': 'closure', 'distractor_rank': '1', 'longest': 'true', 'long': 'true', 'short': 'true', 'shortest': 'true'},
-    {'options': 'closure', 'distractor_rank': '2', 'longest': 'true', 'long': 'false', 'short': 'false', 'shortest': 'false'},
-    {'options': 'closure', 'distractor_rank': '3', 'longest': 'true', 'long': 'false', 'short': 'false', 'shortest': 'false'},
-    {'options': 'colour and closure', 'distractor_rank': '1', 'longest': 'true', 'long': 'true', 'short': 'false', 'shortest': 'false'},
-    {'options': 'colour and closure', 'distractor_rank': '2', 'longest': 'false', 'long': 'true', 'short': 'false', 'shortest': 'false'},
-    {'options': 'colour and closure', 'distractor_rank': '3', 'longest': 'false', 'long': 'false', 'short': 'false', 'shortest': 'false'}
+    {'options': 'colour', 'distractor_rank': '1', '1000': 'true', '500': 'true', '250': 'true', '125': 'true'},
+    {'options': 'colour', 'distractor_rank': '2', '1000': 'true', '500': 'true', '250': 'false', '125': 'false'},
+    {'options': 'colour', 'distractor_rank': '3', '1000': 'true', '500': 'false', '250': 'false', '125': 'false'},
+    {'options': 'closure', 'distractor_rank': '1', '1000': 'true', '500': 'true', '250': 'true', '125': 'true'},
+    {'options': 'closure', 'distractor_rank': '2', '1000': 'true', '500': 'false', '250': 'false', '125': 'false'},
+    {'options': 'closure', 'distractor_rank': '3', '1000': 'true', '500': 'false', '250': 'false', '125': 'false'},
+    {'options': 'colour and closure', 'distractor_rank': '1', '1000': 'true', '500': 'true', '250': 'false', '125': 'false'},
+    {'options': 'colour and closure', 'distractor_rank': '2', '1000': 'false', '500': 'true', '250': 'false', '125': 'false'},
+    {'options': 'colour and closure', 'distractor_rank': '3', '1000': 'false', '500': 'false', '250': 'false', '125': 'true'}
 ];
 
 function initUI() {
