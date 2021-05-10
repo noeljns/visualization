@@ -7,6 +7,11 @@ template.innerHTML = `
         #roundDisplay {
         margin-left: 420px;
     }
+    #countdown {
+        font-size: 100px;
+        padding-left: 270px;
+        padding-top: 40px;
+    }
     #canvas {
         display: none;
         border: 1px solid grey;
@@ -26,11 +31,12 @@ template.innerHTML = `
     }
     </style>
     <div class="wrapper">
-        <div><span id="timeDisplay"></span><span id="roundDisplay"></span></div>
-        <h2 id="instruction"></h2>
-        <canvas id="canvas"></canvas>
-        <vaadin-button id="startBtn">Start</vaadin-button>
-        <div id="evaluation">
+    <div><span id="timeDisplay"></span><span id="roundDisplay"></span></div>
+    <h2 id="instruction"></h2>
+    <canvas id="canvas"></canvas>
+    <vaadin-button id="startBtn">Start</vaadin-button>
+    <div id="countdown"></div>
+    <div id="evaluation">
             <vaadin-button id="notSeen" class="evaluationBtn">Nicht gesehen</vaadin-button>
             <div id="positionButtons">
                 <vaadin-button id="topLeft" class="evaluationBtn">Oben links</vaadin-button>
@@ -53,6 +59,7 @@ class TestElement extends HTMLElement {
         this.instructionText = this.shadowRoot.querySelector("#instruction");
         this.evaluation = this.shadowRoot.querySelector("#evaluation");
         this.canvas = this.shadowRoot.querySelector("#canvas");
+        this.countdown = this.shadowRoot.querySelector("#countdown");
 
         this.startBtn = this.shadowRoot.querySelector("#startBtn");
         this.startBtn.addEventListener("click", this._startButtonClicked);
@@ -179,13 +186,27 @@ class TestElement extends HTMLElement {
     }
 
     showCanvas(time) {
-        //TODO: Add countdown
-        this.canvas.style.display = "block";
         this.startBtn.style.display = "none";
+        this.countdown.style.block = "none";
+        this.countdown.innerHTML = "3";
         setTimeout(() => {
-            this.canvas.style.display = "none";
-            this.evaluation.style.display = "flex";
-        }, time);
+            this.countdown.innerHTML = "2";
+            setTimeout(() => {
+                this.countdown.innerHTML = "1";
+                setTimeout(() => {
+                    this.countdown.style.display = "none";
+                    this.canvas.style.display = "block";
+                    setTimeout(() => {
+                        this.canvas.style.display = "none";
+                        this.evaluation.style.display = "flex";
+                    }, time);
+                }, 1000);
+            }, 1000);
+        }, 1000);
+
+        //timeout , set 2
+        //timepout, set 3
+        //hide
     }
 
     _notSeen() {
