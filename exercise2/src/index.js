@@ -1,5 +1,6 @@
 import "./custom-elements/test-element";
 import "./custom-elements/hue-test";
+import "./custom-elements/closure-test";
 import "./custom-elements/results-table";
 
 window.addEventListener("load", () => {
@@ -8,7 +9,10 @@ window.addEventListener("load", () => {
 
 const STARTING_TIME = 1000;
 const MIN_TIME = 125;
-const EXPERIMENTS = [{ element: "hue-test", name: "Farbe", instruction: "Wo ist der rote Kreis?" }];
+const EXPERIMENTS = [
+    { element: "closure-test", name: "Geschlossenheit", instruction: "Wo ist der geschlossene Ring?" },
+    { element: "hue-test", name: "Farbe", instruction: "Wo ist der rote Kreis?" },
+];
 let experimentContainer, resultsTable;
 let currentExperiment = 0;
 let currentTime = STARTING_TIME;
@@ -40,7 +44,7 @@ function startNewExperiment(experiment) {
     currentTime = STARTING_TIME;
     currentRound = 1;
     while (experimentContainer.firstChild) {
-        experimentContainer.removeChild(parent.firstChild);
+        experimentContainer.removeChild(experimentContainer.firstChild);
     }
     currentTestElement = document.createElement(experiment.element);
     currentTestElement.setAttribute("time", currentTime);
@@ -61,6 +65,8 @@ function nextRound(evt) {
         data.push(currentTestRound);
         if (currentExperiment < EXPERIMENTS.length - 1) {
             currentExperiment++;
+            currentRound = 1;
+            currentTestRound = { options: EXPERIMENTS[currentExperiment].name, distractor_rank: currentRound };
             startNewExperiment(EXPERIMENTS[currentExperiment]);
         } else {
             resultsTable.parentNode.style.display = "block";
@@ -72,6 +78,7 @@ function nextRound(evt) {
         data.push(currentTestRound);
         console.log(data);
         currentRound++;
+        currentTestRound = { options: EXPERIMENTS[currentExperiment].name, distractor_rank: currentRound };
         currentTestElement.setAttribute("round", currentRound);
         currentTime = STARTING_TIME;
         currentTestElement.setAttribute("time", currentTime);
