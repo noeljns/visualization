@@ -1,6 +1,7 @@
 import "./custom-elements/test-element";
 import "./custom-elements/hue-test";
 import "./custom-elements/closure-test";
+import "./custom-elements/intersection-test";
 import "./custom-elements/results-table";
 
 window.addEventListener("load", () => {
@@ -10,8 +11,9 @@ window.addEventListener("load", () => {
 const STARTING_TIME = 1000;
 const MIN_TIME = 125;
 const EXPERIMENTS = [
-    { element: "closure-test", name: "Geschlossenheit", instruction: "Wo ist der geschlossene Ring?" },
     { element: "hue-test", name: "Farbe", instruction: "Wo ist der rote Kreis?" },
+    { element: "closure-test", name: "Geschlossenheit", instruction: "Wo ist der geschlossene Ring?" },
+    { element: "intersection-test", name: "Kreuzung", instruction: "Wo ist das Kreuz?" },
 ];
 let experimentContainer, resultsTable;
 let currentExperiment = 0;
