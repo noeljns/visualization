@@ -22,7 +22,7 @@ template.innerHTML = `
 
     <div class="wrapper">
         Results Table
-        <vaadin-grid id="table">
+        <vaadin-grid id="table" theme="column-borders">
             <vaadin-grid-column width="170px"></vaadin-grid-column>
             <vaadin-grid-column width="160px"></vaadin-grid-column>
             <vaadin-grid-column path="1000"></vaadin-grid-column>
@@ -96,16 +96,16 @@ class ResultsTable extends HTMLElement {
 
             switch (column.path) {
                 case "1000":
-                    classes += model.item[1000] == 'true' ? 'green' : 'red';
+                    classes += model.item[1000] == true ? 'green' : 'red';
                     break;
                 case "500":
-                    classes += model.item[500] == 'true' ? ' green' : ' red';
+                    classes += model.item[500] == true ? ' green' : ' red';
                     break;
                 case "250":
-                    classes += model.item[250] == 'true' ? ' green' : ' red';
+                    classes += model.item[250] == true ? ' green' : ' red';
                     break;
                 case "125":
-                    classes += model.item[125] == 'true' ? ' green' : ' red';
+                    classes += model.item[125] == true ? ' green' : ' red';
                     break;
             }
 
