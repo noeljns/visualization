@@ -115,7 +115,7 @@ class TestElement extends HTMLElement {
             : (distractorPadding = distractorHeight);
         for (let i = 0; i < quantity; i++) {
             let newPos = this.getRandomPosition(distractorPadding);
-            while (this.isOverlapping(newPos, [...distractorPositions, targetPos], distractorPositions)) {
+            while (this.isOverlapping(newPos, [...distractorPositions, targetPos], distractorPadding)) {
                 newPos = this.getRandomPosition(distractorPadding);
             }
             distractorPositions.push(newPos);
@@ -129,8 +129,16 @@ class TestElement extends HTMLElement {
     }
 
     isOverlapping(pos, positionsToCheck, padding) {
-        //dont overlap with other distractors
-        //dont overlap with the target
+        for (let i = 0; i < positionsToCheck.length; i++) {
+            if (
+                pos.x > positionsToCheck[i].x - padding &&
+                pos.x < positionsToCheck[i].x + padding &&
+                pos.y > positionsToCheck[i].y - padding &&
+                pos.y < positionsToCheck[i].y + padding
+            ) {
+                return true;
+            }
+        }
         return false;
     }
 
