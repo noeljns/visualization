@@ -4,7 +4,7 @@ const template = document.createElement("template");
 
 template.innerHTML = `
     <style>
-        #roundDisplay {
+    #roundDisplay {
         margin-left: 420px;
     }
     #countdown {

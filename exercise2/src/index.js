@@ -11,9 +11,21 @@ window.addEventListener("load", () => {
 const STARTING_TIME = 1000;
 const MIN_TIME = 125;
 const EXPERIMENTS = [
-    { element: "hue-test", name: "Farbe", instruction: "Wo ist der rote Kreis?" },
-    { element: "closure-test", name: "Geschlossenheit", instruction: "Wo ist der geschlossene Ring?" },
-    { element: "intersection-test", name: "Kreuzung", instruction: "Wo ist das Kreuz?" },
+    { element: "hue-test", name: "Farbe", instruction: "Wo ist der rote Kreis?", color: false },
+    {
+        element: "closure-test",
+        name: "Geschlossenheit",
+        instruction: "Wo ist der geschlossene Ring?",
+        color: false,
+    },
+    {
+        element: "closure-test",
+        name: "Geschlossenheit/Farbe",
+        instruction: "Wo ist der geschlossene grüne Ring?",
+        color: true,
+    },
+    { element: "intersection-test", name: "Kreuzung", instruction: "Wo ist das Kreuz?", color: false },
+    { element: "intersection-test", name: "Kreuzung/Farbe", instruction: "Wo ist das lilane Kreuz?", color: true },
 ];
 let experimentContainer, resultsTable;
 let currentExperiment = 0;
@@ -49,6 +61,7 @@ function startNewExperiment(experiment) {
         experimentContainer.removeChild(experimentContainer.firstChild);
     }
     currentTestElement = document.createElement(experiment.element);
+    currentTestElement.setAttribute("color", experiment.color);
     currentTestElement.setAttribute("time", currentTime);
     currentTestElement.setAttribute("round", currentRound);
     currentTestElement.setAttribute("instruction", experiment.instruction);

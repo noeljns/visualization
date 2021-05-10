@@ -1,20 +1,18 @@
 import "@vaadin/vaadin-grid";
-import "@vaadin/vaadin-grid/vaadin-grid-column-group"
+import "@vaadin/vaadin-grid/vaadin-grid-column-group";
 const template = document.createElement("template");
 
 template.innerHTML = `
 <dom-module id="my-grid-styles" theme-for="vaadin-grid">
 <template>
-  <style>
+    <style>
     [part~="cell"].green {
-      background: rgb(230, 245, 226);
+        background: rgb(230, 245, 226);
     }
-
     [part~="cell"].red {
-      background: rgb(255, 240, 240);
+        background: rgb(255, 240, 240);
     }
-
-  </style>
+    </style>
 </template>
 </dom-module>
 
@@ -22,7 +20,7 @@ template.innerHTML = `
     </style>
 
     <div class="wrapper">
-        Results Table
+        <h1>Ergebnisse</h1>
         <vaadin-grid id="table" theme="column-borders">
             <vaadin-grid-column-group header="Test Setting">
                 <vaadin-grid-column width="170px"></vaadin-grid-column>
@@ -96,27 +94,26 @@ class ResultsTable extends HTMLElement {
     }
 
     colorTable() {
-        this.table.cellClassNameGenerator = function(column, model) {
+        this.table.cellClassNameGenerator = function (column, model) {
             let classes = "";
 
             switch (column.path) {
                 case "1000":
-                    classes += model.item[1000] == true ? 'green' : 'red';
+                    classes += model.item[1000] == true ? "green" : "red";
                     break;
                 case "500":
-                    classes += model.item[500] == true ? ' green' : ' red';
+                    classes += model.item[500] == true ? " green" : " red";
                     break;
                 case "250":
-                    classes += model.item[250] == true ? ' green' : ' red';
+                    classes += model.item[250] == true ? " green" : " red";
                     break;
                 case "125":
-                    classes += model.item[125] == true ? ' green' : ' red';
+                    classes += model.item[125] == true ? " green" : " red";
                     break;
             }
 
             return classes;
-        }
-
+        };
     }
 }
 

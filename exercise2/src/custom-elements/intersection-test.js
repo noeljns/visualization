@@ -26,7 +26,7 @@ class IntersectionTest extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ["instruction", "time", "round"];
+        return ["instruction", "time", "round", "color"];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -43,6 +43,9 @@ class IntersectionTest extends HTMLElement {
                 case "round":
                     this.round = newValue;
                     this.testElement.setAttribute("round", newValue);
+                    break;
+                case "color":
+                    this.useColorInDistractors = newValue === "true";
                     break;
             }
         }
@@ -75,24 +78,31 @@ class IntersectionTest extends HTMLElement {
     }
 
     drawDistractors(targetPos, round) {
-        let amountOfDistractors, rotations;
+        let amountOfDistractors, rotations, colors, variations;
         let ctx = this.testElement.getContext();
         switch (round) {
             case "1":
                 rotations = [0];
                 amountOfDistractors = 10;
+                colors = ["purple", "green"];
+                variations = [0];
                 break;
             case "2":
-                rotations = [0, 90];
+                rotations = [0, 90, 180];
                 amountOfDistractors = 20;
+                colors = ["purple", "green", "blue", "purple"];
+                variations = [0, 5, 8];
                 break;
             case "3":
                 rotations = [0, 90, 180, 270];
                 amountOfDistractors = 30;
+                colors = ["purple", "green", "blue", "pink", "purple"];
+                variations = [0, 5, 5, 7, 8, 12];
                 break;
             default:
                 rotations = [0];
                 amountOfDistractors = 10;
+                colors = ["purple", "green"];
         }
         let distractorPositions = this.testElement.getRandomDistractorPositions(
             amountOfDistractors,
@@ -101,7 +111,14 @@ class IntersectionTest extends HTMLElement {
             targetPos
         );
         for (let i = 0; i < distractorPositions.length; i++) {
-            this.drawL(distractorPositions[i], this.color, ctx, rotations[i % rotations.length]);
+            let color = this.useColorInDistractors ? colors[i % colors.length] : this.color;
+            this.drawL(
+                distractorPositions[i],
+                color,
+                ctx,
+                rotations[i % rotations.length],
+                variations[i % variations.length]
+            );
         }
     }
 
@@ -118,16 +135,18 @@ class IntersectionTest extends HTMLElement {
         ctx.stroke();
     }
 
-    drawL(pos, color, ctx, rotation) {
+    drawL(pos, color, ctx, rotation, variation) {
         switch (rotation) {
             case 0:
                 ctx.beginPath();
-                ctx.lineJoin = "miter";
                 ctx.moveTo(pos.x - this.size / 2, pos.y - this.size / 2);
                 ctx.lineTo(pos.x - this.size / 2, pos.y + this.size / 3);
-                ctx.lineTo(pos.x + this.size / 3, pos.y + this.size / 3);
                 ctx.lineWidth = this.lineWidth;
                 ctx.strokeStyle = color;
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(pos.x - this.size / 2 - variation - this.lineWidth / 2, pos.y + this.size / 3);
+                ctx.lineTo(pos.x + this.size / 3 - variation - this.lineWidth / 2, pos.y + this.size / 3);
                 ctx.stroke();
                 break;
             case 90:
@@ -135,29 +154,38 @@ class IntersectionTest extends HTMLElement {
                 ctx.lineJoin = "miter";
                 ctx.moveTo(pos.x - this.size / 2, pos.y + this.size / 2);
                 ctx.lineTo(pos.x - this.size / 2, pos.y - this.size / 3);
-                ctx.lineTo(pos.x + this.size / 3, pos.y - this.size / 3);
                 ctx.lineWidth = this.lineWidth;
                 ctx.strokeStyle = color;
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(pos.x - this.size / 2 - variation - this.lineWidth / 2, pos.y - this.size / 3);
+                ctx.lineTo(pos.x + this.size / 3 - variation - this.lineWidth / 2, pos.y - this.size / 3);
                 ctx.stroke();
                 break;
             case 180:
                 ctx.beginPath();
                 ctx.lineJoin = "miter";
-                ctx.moveTo(pos.x - this.size / 2, pos.y - this.size / 2);
-                ctx.lineTo(pos.x + this.size / 3, pos.y - this.size / 2);
-                ctx.lineTo(pos.x + this.size / 3, pos.y + this.size / 3);
+                ctx.moveTo(pos.x - this.size / 2 + variation + this.lineWidth / 2, pos.y - this.size / 2);
+                ctx.lineTo(pos.x + this.size / 3 + variation + this.lineWidth / 2, pos.y - this.size / 2);
                 ctx.lineWidth = this.lineWidth;
                 ctx.strokeStyle = color;
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(pos.x + this.size / 3, pos.y - this.size / 2);
+                ctx.lineTo(pos.x + this.size / 3, pos.y + this.size / 3);
                 ctx.stroke();
                 break;
             case 270:
                 ctx.beginPath();
                 ctx.lineJoin = "miter";
-                ctx.moveTo(pos.x - this.size / 2, pos.y + this.size / 2);
-                ctx.lineTo(pos.x + this.size / 3, pos.y + this.size / 2);
-                ctx.lineTo(pos.x + this.size / 3, pos.y - this.size / 3);
+                ctx.moveTo(pos.x - this.size / 2 + variation + this.lineWidth / 2, pos.y + this.size / 2);
+                ctx.lineTo(pos.x + this.size / 3 + variation + this.lineWidth / 2, pos.y + this.size / 2);
                 ctx.lineWidth = this.lineWidth;
                 ctx.strokeStyle = color;
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(pos.x + this.size / 3, pos.y + this.size / 2);
+                ctx.lineTo(pos.x + this.size / 3, pos.y - this.size / 3);
                 ctx.stroke();
                 break;
         }
