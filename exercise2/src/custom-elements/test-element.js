@@ -122,6 +122,8 @@ class TestElement extends HTMLElement {
         ctx.beginPath();
         ctx.moveTo(this.canvas.width / 2, 0);
         ctx.lineTo(this.canvas.width / 2, this.canvas.height);
+        ctx.strokeStyle = "gray";
+        ctx.lineWidth = 1;
         ctx.stroke();
         ctx.beginPath();
         ctx.moveTo(0, this.canvas.height / 2);
