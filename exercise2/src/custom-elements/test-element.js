@@ -92,6 +92,21 @@ class TestElement extends HTMLElement {
         return this.canvas.getContext("2d");
     }
 
+    getSpatialPosition(pos) {
+        let spatialPosition = "";
+        if (pos.y <= this.canvas.height / 2) {
+            spatialPosition = "top";
+        } else {
+            spatialPosition = "bottom";
+        }
+        if (pos.x <= this.canvas.width / 2) {
+            spatialPosition += "-left";
+        } else {
+            spatialPosition += "-right";
+        }
+        return spatialPosition;
+    }
+
     clearCanvas() {
         var ctx = this.canvas.getContext("2d");
         ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -104,7 +119,6 @@ class TestElement extends HTMLElement {
         ctx.lineTo(this.canvas.width, this.canvas.height / 2);
         ctx.lineWidth = 1;
         ctx.stroke();
-        console.log(this.canvas.width);
     }
 
     getRandomDistractorPositions(quantity, distractorWidth, distractorHeight, targetPos) {

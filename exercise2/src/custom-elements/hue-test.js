@@ -54,13 +54,13 @@ class HueTest extends HTMLElement {
     }
 
     testDone(evt) {
-        console.log(evt);
-        //TODO: check if position was selected correctly
-        //if it was not correct, send found: false else found: true
+        evt.stopPropagation();
+        let targetSpatialPosition = this.testElement.getSpatialPosition(this.targetPosition);
+        let found = targetSpatialPosition === evt.detail.result ? true : false;
         this.dispatchEvent(
             new CustomEvent("test-done", {
                 composed: true,
-                detail: { found: true },
+                detail: { found },
             })
         );
     }
