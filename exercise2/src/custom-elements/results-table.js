@@ -1,4 +1,5 @@
 import "@vaadin/vaadin-grid";
+import "@vaadin/vaadin-grid/vaadin-grid-column-group"
 const template = document.createElement("template");
 
 template.innerHTML = `
@@ -23,12 +24,16 @@ template.innerHTML = `
     <div class="wrapper">
         Results Table
         <vaadin-grid id="table" theme="column-borders">
-            <vaadin-grid-column width="170px"></vaadin-grid-column>
-            <vaadin-grid-column width="160px"></vaadin-grid-column>
+            <vaadin-grid-column-group header="Test Setting">
+                <vaadin-grid-column width="170px"></vaadin-grid-column>
+                <vaadin-grid-column width="160px"></vaadin-grid-column>
+            </vaadin-grid-column-group>
+            <vaadin-grid-column-group header="Test Ergebnisse">
             <vaadin-grid-column path="1000"></vaadin-grid-column>
             <vaadin-grid-column path="500"></vaadin-grid-column>
             <vaadin-grid-column path="250"></vaadin-grid-column>
             <vaadin-grid-column path="125"></vaadin-grid-column>
+            </vaadin-grid-column-group>
         </vaadin-grid>
     </div>
     `;
