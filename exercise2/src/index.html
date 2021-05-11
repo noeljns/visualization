@@ -19,23 +19,45 @@
     <style>
         body {
             display: flex;
-            justify-content: center;
+            align-items: center;
+            flex-direction: column;
             font-family: "Roboto", sans-serif;
         }
         .container {
-            margin-top: 100px;
+            margin-top: 20px;
             padding: 80px;
             border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 10px 12px rgba(0, 0, 0, 0.15);
             min-width: 600px;
+            width: 600px;
         }
         .container--table {
             flex-grow: 1;
-            max-width: 1000px;
+            width: 1000px;
+            height: 713px;
+        }
+        #progressBar {
+            width: 600px;
+            margin-top: 120px;
+        }
+        progress[value] {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 25px;
+        }
+        progress[value]::-webkit-progress-bar {
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+        }
+        progress[value]::-webkit-progress-value {
+            background-color: #449bf5;
+            border-radius: 5px;
         }
     </style>
 
     <body>
+        <progress id="progressBar" value="0"></progress>
         <div class="container" id="experimentContainer"></div>
         <div class="container container--table" style="display: none">
             <results-table id="resultsTable"></results-table>

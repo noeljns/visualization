@@ -27,13 +27,14 @@ const EXPERIMENTS = [
     { element: "intersection-test", name: "Kreuzung", instruction: "Wo ist das Kreuz?", color: false },
     { element: "intersection-test", name: "Kreuzung/Farbe", instruction: "Wo ist das lilane Kreuz?", color: true },
 ];
-let experimentContainer, resultsTable;
+let experimentContainer, resultsTable, progressBar;
 let currentExperiment = 0;
 let currentTime = STARTING_TIME;
 let currentRound = 1;
 let currentTestElement = {};
 let currentTestRound = {};
 let data = [];
+let progress = 0;
 
 // dummy data
 let dummy_data = [
@@ -51,6 +52,7 @@ let dummy_data = [
 function initUI() {
     experimentContainer = document.getElementById("experimentContainer");
     resultsTable = document.getElementById("resultsTable");
+    progressBar = document.getElementById("progressBar");
     startNewExperiment(EXPERIMENTS[currentExperiment]);
 }
 
@@ -71,6 +73,8 @@ function startNewExperiment(experiment) {
 }
 
 function nextRound(evt) {
+    progress++;
+    progressBar.value = progress / (EXPERIMENTS.length * 3 * 4);
     currentTestRound[currentTime] = evt.detail.found;
     if (currentTime > MIN_TIME) {
         currentTime = currentTime / 2;
@@ -88,6 +92,7 @@ function nextRound(evt) {
             experimentContainer.style.display = "none";
             resultsTable.setData(data);
             resultsTable.colorTable();
+            progressBar.style.display = "none";
         }
     } else {
         data.push(currentTestRound);

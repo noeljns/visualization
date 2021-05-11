@@ -21,7 +21,7 @@ template.innerHTML = `
 
     <div class="wrapper">
         <h1>Ergebnisse</h1>
-        <vaadin-grid id="table" theme="column-borders">
+        <vaadin-grid id="table" style="height: 613px;" theme="column-borders">
             <vaadin-grid-column-group header="Test Setting">
                 <vaadin-grid-column width="170px"></vaadin-grid-column>
                 <vaadin-grid-column width="160px"></vaadin-grid-column>
