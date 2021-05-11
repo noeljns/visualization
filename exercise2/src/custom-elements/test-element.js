@@ -54,7 +54,7 @@ class TestElement extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-        this.countDownTime = 200;
+        this.countDownTime = 500;
 
         this.timeDisplay = this.shadowRoot.querySelector("#timeDisplay");
         this.roundDisplay = this.shadowRoot.querySelector("#roundDisplay");
