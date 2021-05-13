@@ -19,4 +19,4 @@ $ npm run dev
 # Visualized example data
 
 ![Screenshot1](img/screenshot1.png)
-![Screenshot2](img/screenshot2.jpeg)
+![Screenshot2](img/screenshot2.png)
