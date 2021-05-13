@@ -85,24 +85,25 @@ class IntersectionTest extends HTMLElement {
                 rotations = [0];
                 amountOfDistractors = 10;
                 colors = ["purple", "green"];
-                variations = [0];
+                variations = [0, 0, 1, 1];
                 break;
             case "2":
                 rotations = [0, 90, 180];
                 amountOfDistractors = 20;
                 colors = ["purple", "green", "blue", "purple"];
-                variations = [0, 5, 8];
+                variations = [0, 1, 5, 8, 1, 0];
                 break;
             case "3":
                 rotations = [0, 90, 180, 270];
                 amountOfDistractors = 30;
                 colors = ["purple", "green", "blue", "pink", "purple"];
-                variations = [0, 5, 5, 7, 8, 12];
+                variations = [0, 1, 5, 5, 8, 1, 12];
                 break;
             default:
                 rotations = [0];
                 amountOfDistractors = 10;
                 colors = ["purple", "green"];
+                variations = [0, 0, 1, 1];
         }
         let distractorPositions = this.testElement.getRandomDistractorPositions(
             amountOfDistractors,
@@ -112,13 +113,12 @@ class IntersectionTest extends HTMLElement {
         );
         for (let i = 0; i < distractorPositions.length; i++) {
             let color = this.useColorInDistractors ? colors[i % colors.length] : this.color;
-            this.drawL(
-                distractorPositions[i],
-                color,
-                ctx,
-                rotations[i % rotations.length],
-                variations[i % variations.length]
-            );
+            let variation = variations[i % variations.length];
+            if (variation === 1 && color !== this.color) {
+                this.drawCross(distractorPositions[i], color, ctx);
+            } else {
+                this.drawL(distractorPositions[i], color, ctx, rotations[i % rotations.length], variation);
+            }
         }
     }
 

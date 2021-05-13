@@ -82,22 +82,30 @@ class ClosureTest extends HTMLElement {
         let ctx = this.testElement.getContext();
         switch (round) {
             case "1":
-                angles = [1.6 * Math.PI];
+                angles = [2 * Math.PI, 1.6 * Math.PI];
                 amountOfDistractors = 10;
                 colors = ["purple", "green"];
                 break;
             case "2":
-                angles = [1.6 * Math.PI, 1.7 * Math.PI, 1.8 * Math.PI];
+                angles = [2 * Math.PI, 1.6 * Math.PI, 1.7 * Math.PI, 1.8 * Math.PI];
                 amountOfDistractors = 20;
                 colors = ["purple", "green", "blue", "green"];
                 break;
             case "3":
-                angles = [1.3 * Math.PI, 1.4 * Math.PI, 1.5 * Math.PI, 1.6 * Math.PI, 1.7 * Math.PI, 1.8 * Math.PI];
+                angles = [
+                    2 * Math.PI,
+                    1.3 * Math.PI,
+                    1.4 * Math.PI,
+                    1.5 * Math.PI,
+                    1.6 * Math.PI,
+                    1.7 * Math.PI,
+                    1.8 * Math.PI,
+                ];
                 amountOfDistractors = 30;
                 colors = ["purple", "green", "blue", "pink", "green"];
                 break;
             default:
-                angles = [1.6 * Math.PI];
+                angles = [2 * Math.PI, 1.6 * Math.PI];
                 amountOfDistractors = 10;
                 colors = ["purple", "green"];
         }
@@ -109,7 +117,11 @@ class ClosureTest extends HTMLElement {
         );
         for (let i = 0; i < distractorPositions.length; i++) {
             let color = this.useColorInDistractors ? colors[i % colors.length] : this.color;
-            this.drawRing(distractorPositions[i], color, ctx, angles[i % angles.length]);
+            let angle = angles[i % angles.length];
+            if (angle === 2 * Math.PI && this.color === color) {
+                angle = angles[(i % angles.length) + 1];
+            }
+            this.drawRing(distractorPositions[i], color, ctx, angle);
         }
     }
 
