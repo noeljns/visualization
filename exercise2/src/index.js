@@ -11,7 +11,6 @@ window.addEventListener("load", () => {
 const STARTING_TIME = 1000;
 const MIN_TIME = 125;
 const EXPERIMENTS = [
-    { element: "intersection-test", name: "Kreuzung/Farbe", instruction: "Wo ist das lilane Kreuz?", color: true },
     { element: "hue-test", name: "Farbe", instruction: "Wo ist der rote Kreis?", color: false },
     {
         element: "closure-test",
@@ -26,6 +25,7 @@ const EXPERIMENTS = [
         color: true,
     },
     { element: "intersection-test", name: "Kreuzung", instruction: "Wo ist das Kreuz?", color: false },
+    { element: "intersection-test", name: "Kreuzung/Farbe", instruction: "Wo ist das lilane Kreuz?", color: true },
 ];
 let experimentContainer, resultsTable, progressBar;
 let currentExperiment = 0;
