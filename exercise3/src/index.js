@@ -7,9 +7,11 @@ window.addEventListener("load", () => {
 
 function initUI() {
     let comboX = document.getElementById("combo-x");
-    comboX.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
+    // comboX.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
+    comboX.items = ["mpg", "cylinders", "displacement", "weight", "acceleration", "year"];
     let comboY = document.getElementById("combo-y");
-    comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
+    // comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
+    comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration"];
 
     let selectedX = "year";
     let selectedY = "horsepower";
@@ -47,13 +49,23 @@ function initUI() {
         });
 
     comboX.addEventListener("selected-item-changed", (evt) => {
+        var previouslySelectedX = selectedX;
         selectedX = evt.detail.value;
         updateScatterPlot(selectedX, selectedY, carsData, scatterPlot);
+        updateComboboxItems("combo-y", previouslySelectedX, selectedX);
     });
     comboY.addEventListener("selected-item-changed", (evt) => {
+        var previouslySelectedY = selectedY;
         selectedY = evt.detail.value;
         updateScatterPlot(selectedX, selectedY, carsData, scatterPlot);
+        updateComboboxItems("combo-x", previouslySelectedY, selectedY);
     });
+}
+
+function updateComboboxItems(tagNameOfOtherBox, previouslySelected, selected) {
+    let combobox = document.getElementById(tagNameOfOtherBox);
+    combobox.items.push(previouslySelected);
+    combobox.items = combobox.items.filter(item => item !== selected);
 }
 
 function updateScatterPlot(selectedX, selectedY, carsData, scatterPlot) {
