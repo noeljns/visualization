@@ -6,13 +6,14 @@ window.addEventListener("load", () => {
 });
 
 function initUI() {
+    let comboGlobal = document.getElementById("combo-global");
+    comboGlobal.items = ["origin", "manufacturer"];
     let comboX = document.getElementById("combo-x");
-    // comboX.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
     comboX.items = ["mpg", "cylinders", "displacement", "weight", "acceleration", "year"];
     let comboY = document.getElementById("combo-y");
-    // comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
     comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration"];
 
+    let selectedGlobal = "origin";
     let selectedX = "year";
     let selectedY = "horsepower";
 
@@ -40,8 +41,11 @@ function initUI() {
                     };
                 });
             console.log(carsData);
-            let manufacturers = carsData.map((el) => el.origin).sort();
-            console.log(manufacturers);
+            let origins = carsData.map((el) => el.origin).sort();
+            console.log(origins);
+            // TODO: show check boxes depending on global selection (origins vs. manufacturers)
+            // TODO: color cars depending on global selection
+            // TODO: only show cars that are selected via check boxes
             scatterPlot = await showScatterPlot(carsData, selectedX, selectedY);
         })
         .then(() => {
