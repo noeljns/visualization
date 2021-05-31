@@ -11,11 +11,15 @@ function initUI() {
     let comboY = document.getElementById("combo-y");
     comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
 
-    // parse and filter input file
+    let selectedX = "year";
+    let selectedY = "horsepower";
+
+    let scatterPlot, carsData;
+
     axios
         .get("res/cars.txt")
-        .then((res) => {
-            var carsData = res.data
+        .then(async (res) => {
+            carsData = res.data
                 .split("\n")
                 .filter((item) => (item.indexOf("NA") >= 0 || item.indexOf("Manufacturer") >= 0 ? false : true))
                 .map((item) => {
@@ -36,21 +40,40 @@ function initUI() {
             console.log(carsData);
             let manufacturers = carsData.map((el) => el.origin).sort();
             console.log(manufacturers);
-            showScatterPlot(carsData, selectedX, selectedY);
+            scatterPlot = await showScatterPlot(carsData, selectedX, selectedY);
         })
         .then(() => {
             // always executed
         });
 
-        var selectedX = "year";
-        var selectedY = "horsepower";
-
-        comboX.addEventListener("selected-item-changed", (evt) => {
-            // FIXME selectedX = evt.detail.value;
-        });
+    comboX.addEventListener("selected-item-changed", (evt) => {
+        selectedX = evt.detail.value;
+        updateScatterPlot(selectedX, selectedY, carsData, scatterPlot);
+    });
+    comboY.addEventListener("selected-item-changed", (evt) => {
+        selectedY = evt.detail.value;
+        updateScatterPlot(selectedX, selectedY, carsData, scatterPlot);
+    });
 }
 
-function showScatterPlot(carsData, selectedX, selectedY) {
+function updateScatterPlot(selectedX, selectedY, carsData, scatterPlot) {
+    let { x, y, width, height, svg, cars } = scatterPlot;
+    var t = d3.transition().duration(750).ease(d3.easeLinear);
+
+    let { rangeX, rangeY } = getRange(selectedX, selectedY, carsData);
+    x.domain([rangeX.min, rangeX.max]).range([0, width]);
+    y.domain([rangeY.min, rangeY.max]).range([height, 0]);
+
+    svg.select(".x.axis").transition(t).call(d3.axisBottom(x));
+    svg.select(".y.axis").transition(t).call(d3.axisLeft(y));
+
+    cars.transition(t)
+        .style("fill", "#990000")
+        .attr("x", (d) => x(d[selectedX]))
+        .attr("y", (d) => y(d[selectedY]));
+}
+
+async function showScatterPlot(carsData, selectedX, selectedY) {
     let margin = { top: 10, right: 30, bottom: 30, left: 60 },
         width = 800 - margin.left - margin.right,
         height = 800 - margin.top - margin.bottom;
@@ -64,9 +87,44 @@ function showScatterPlot(carsData, selectedX, selectedY) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    let { rangeX, rangeY } = getRange(selectedX, selectedY, carsData);
+
+    // Add X axis
+    var x = d3.scaleLinear().domain([rangeX.min, rangeX.max]).range([0, width]);
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear().domain([rangeY.min, rangeY.max]).range([height, 0]);
+    svg.append("g").attr("class", "y axis").call(d3.axisLeft(y));
+
+    let color = "#009900";
+
+    let carSvg = await d3.xml("./res/car.svg");
+    let cars = svg
+        .append("svg")
+        .selectAll("div")
+        .data(carsData)
+        .enter()
+        .append(() => carSvg.documentElement.cloneNode(true))
+        .attr("xlink:href", "./res/car.svg")
+        .attr("x", (d) => x(d[selectedX]))
+        .attr("y", (d) => y(d[selectedY]))
+        .attr("class", "cars")
+        .attr("width", 20)
+        .attr("height", 20)
+        .attr("opacity", 0.2)
+        .style("fill", color);
+
+    return { x, y, width, height, svg, cars };
+}
+
+function getRange(selectedX, selectedY, carsData) {
     let rangeX = { min: carsData[0][selectedX], max: carsData[0][selectedX] };
     let rangeY = { min: carsData[0][selectedY], max: carsData[0][selectedY] };
-    let padding = { year: 1, horsepower: 10, mpg: 10, cylinders: 1, displacement: 10, weight: 10, acceleration: 10};
+    let padding = { year: 1, horsepower: 10, mpg: 10, cylinders: 1, displacement: 10, weight: 10, acceleration: 10 };
     carsData.forEach((car) => {
         if (car[selectedX] < rangeX.min) rangeX.min = car[selectedX];
         if (car[selectedX] > rangeX.max) rangeX.max = car[selectedX];
@@ -77,29 +135,5 @@ function showScatterPlot(carsData, selectedX, selectedY) {
     rangeX.max += padding[selectedX];
     rangeY.min -= padding[selectedY];
     rangeY.max += padding[selectedY];
-    console.log(rangeX.min + "    " + rangeX.max);
-    console.log(rangeY.min + "    " + rangeY.max);
-
-    // Add X axis
-    var x = d3.scaleLinear().domain([rangeX.min, rangeX.max]).range([0, width]);
-    svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x));
-
-    // Add Y axis
-    var y = d3.scaleLinear().domain([rangeY.min, rangeY.max]).range([height, 0]);
-    svg.append("g").call(d3.axisLeft(y));
-
-    // Add dots
-    svg.append("g")
-        .selectAll("image")
-        .data(carsData)
-        .enter()
-        .append("svg:image")
-        .attr("xlink:href", "./res/car.png")
-        .attr("x", (d) => x(d[selectedX]))
-        .attr("y", (d) => y(d[selectedY]))
-        .attr("width", 20)
-        .attr("height", 20)
-        .style("fill", "#69b3a2");
+    return { rangeX, rangeY };
 }
