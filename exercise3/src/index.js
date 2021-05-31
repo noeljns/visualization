@@ -8,11 +8,10 @@ window.addEventListener("load", () => {
 function initUI() {
     let comboX = document.getElementById("combo-x");
     comboX.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
-    comboX.addEventListener("selected-item-changed", (evt) => {
-        console.log(evt.detail.value);
-    });
     let comboY = document.getElementById("combo-y");
     comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
+
+    // parse and filter input file
     axios
         .get("res/cars.txt")
         .then((res) => {
@@ -37,14 +36,21 @@ function initUI() {
             console.log(carsData);
             let manufacturers = carsData.map((el) => el.origin).sort();
             console.log(manufacturers);
-            showScatterPlot(carsData);
+            showScatterPlot(carsData, selectedX, selectedY);
         })
         .then(() => {
             // always executed
         });
+
+        var selectedX = "year";
+        var selectedY = "horsepower";
+
+        comboX.addEventListener("selected-item-changed", (evt) => {
+            // FIXME selectedX = evt.detail.value;
+        });
 }
 
-function showScatterPlot(carsData) {
+function showScatterPlot(carsData, selectedX, selectedY) {
     let margin = { top: 10, right: 30, bottom: 30, left: 60 },
         width = 800 - margin.left - margin.right,
         height = 800 - margin.top - margin.bottom;
@@ -58,19 +64,19 @@ function showScatterPlot(carsData) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    let rangeX = { min: carsData[0].year, max: carsData[0].year };
-    let rangeY = { min: carsData[0].horsepower, max: carsData[0].horsepower };
-    let padding = { year: 1, horsepower: 10 };
+    let rangeX = { min: carsData[0][selectedX], max: carsData[0][selectedX] };
+    let rangeY = { min: carsData[0][selectedY], max: carsData[0][selectedY] };
+    let padding = { year: 1, horsepower: 10, mpg: 10, cylinders: 1, displacement: 10, weight: 10, acceleration: 10};
     carsData.forEach((car) => {
-        if (car.year < rangeX.min) rangeX.min = car.year;
-        if (car.year > rangeX.max) rangeX.max = car.year;
-        if (car.horsepower < rangeY.min) rangeY.min = car.horsepower;
-        if (car.horsepower > rangeY.max) rangeY.max = car.horsepower;
+        if (car[selectedX] < rangeX.min) rangeX.min = car[selectedX];
+        if (car[selectedX] > rangeX.max) rangeX.max = car[selectedX];
+        if (car[selectedY] < rangeY.min) rangeY.min = car[selectedY];
+        if (car[selectedY] > rangeY.max) rangeY.max = car[selectedY];
     });
-    rangeX.min -= padding.year;
-    rangeX.max += padding.year;
-    rangeY.min -= padding.horsepower;
-    rangeY.max += padding.horsepower;
+    rangeX.min -= padding[selectedX];
+    rangeX.max += padding[selectedX];
+    rangeY.min -= padding[selectedY];
+    rangeY.max += padding[selectedY];
     console.log(rangeX.min + "    " + rangeX.max);
     console.log(rangeY.min + "    " + rangeY.max);
 
@@ -91,8 +97,8 @@ function showScatterPlot(carsData) {
         .enter()
         .append("svg:image")
         .attr("xlink:href", "./res/car.png")
-        .attr("x", (d) => x(d.year))
-        .attr("y", (d) => y(d.horsepower))
+        .attr("x", (d) => x(d[selectedX]))
+        .attr("y", (d) => y(d[selectedY]))
         .attr("width", 20)
         .attr("height", 20)
         .style("fill", "#69b3a2");
