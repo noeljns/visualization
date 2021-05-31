@@ -1,10 +1,18 @@
 import axios from "axios";
+import "@vaadin/vaadin-combo-box";
 
 window.addEventListener("load", () => {
     initUI();
 });
 
 function initUI() {
+    let comboX = document.getElementById("combo-x");
+    comboX.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
+    comboX.addEventListener("selected-item-changed", (evt) => {
+        console.log(evt.detail.value);
+    });
+    let comboY = document.getElementById("combo-y");
+    comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration", "year"];
     axios
         .get("res/cars.txt")
         .then((res) => {
@@ -38,8 +46,8 @@ function initUI() {
 
 function showScatterPlot(carsData) {
     let margin = { top: 10, right: 30, bottom: 30, left: 60 },
-        width = 460 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+        width = 800 - margin.left - margin.right,
+        height = 800 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     let svg = d3
@@ -53,7 +61,7 @@ function showScatterPlot(carsData) {
     let rangeX = { min: carsData[0].year, max: carsData[0].year };
     let rangeY = { min: carsData[0].horsepower, max: carsData[0].horsepower };
     let padding = { year: 1, horsepower: 10 };
-    carsData.forEach((car, index) => {
+    carsData.forEach((car) => {
         if (car.year < rangeX.min) rangeX.min = car.year;
         if (car.year > rangeX.max) rangeX.max = car.year;
         if (car.horsepower < rangeY.min) rangeY.min = car.horsepower;
@@ -78,12 +86,14 @@ function showScatterPlot(carsData) {
 
     // Add dots
     svg.append("g")
-        .selectAll("dot")
+        .selectAll("image")
         .data(carsData)
         .enter()
-        .append("circle")
-        .attr("cx", (d) => x(d.year))
-        .attr("cy", (d) => y(d.horsepower))
-        .attr("r", 1.5)
+        .append("svg:image")
+        .attr("xlink:href", "./res/car.png")
+        .attr("x", (d) => x(d.year))
+        .attr("y", (d) => y(d.horsepower))
+        .attr("width", 20)
+        .attr("height", 20)
         .style("fill", "#69b3a2");
 }
