@@ -27,6 +27,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "@vaadin/vaadin-checkbox": "^20.0.0",
     "@vaadin/vaadin-combo-box": "^20.0.0",
     "axios": "^0.21.1"
   }

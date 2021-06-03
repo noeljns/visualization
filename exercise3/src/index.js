@@ -1,9 +1,12 @@
 import axios from "axios";
 import "@vaadin/vaadin-combo-box";
+import "./custom-elements/origin-checkboxes";
 
 window.addEventListener("load", () => {
     initUI();
 });
+let selectedGlobal = "origin";
+let selectedOrigins = ["European", "Japanese", "American"];
 
 function initUI() {
     let comboGlobal = document.getElementById("combo-global");
@@ -13,11 +16,15 @@ function initUI() {
     let comboY = document.getElementById("combo-y");
     comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration"];
 
-    let selectedGlobal = "origin";
+    let scatterPlot, carsData;
     let selectedX = "year";
     let selectedY = "horsepower";
 
-    let scatterPlot, carsData;
+    let originCheckboxes = document.getElementById("originCheckboxes");
+    originCheckboxes.addEventListener("origin-changed", (evt) => {
+        selectedOrigins = evt.detail.selectedOrigins;
+        updateScatterPlot(selectedX, selectedY, carsData, scatterPlot);
+    });
 
     axios
         .get("res/cars.txt")
@@ -69,7 +76,7 @@ function initUI() {
 function updateComboboxItems(tagNameOfOtherBox, previouslySelected, selected) {
     let combobox = document.getElementById(tagNameOfOtherBox);
     combobox.items.push(previouslySelected);
-    combobox.items = combobox.items.filter(item => item !== selected);
+    combobox.items = combobox.items.filter((item) => item !== selected);
 }
 
 function updateScatterPlot(selectedX, selectedY, carsData, scatterPlot) {
@@ -84,9 +91,15 @@ function updateScatterPlot(selectedX, selectedY, carsData, scatterPlot) {
     svg.select(".y.axis").transition(t).call(d3.axisLeft(y));
 
     cars.transition(t)
-        .style("fill", "#990000")
-        .attr("x", (d) => x(d[selectedX]))
-        .attr("y", (d) => y(d[selectedY]));
+        .attr("x", (d) => x(d[selectedX]) - 10)
+        .attr("y", (d) => y(d[selectedY]) - 10)
+        .attr("display", (d) => {
+            if (selectedGlobal === "origin") {
+                return selectedOrigins.indexOf(d.origin) >= 0 ? "block" : "none";
+            } else if (selectedGlobal === "manufacturer") {
+                return selectedManufacturers.indexOf(d.manufacturer) >= 0 ? "block" : "none";
+            }
+        });
 }
 
 async function showScatterPlot(carsData, selectedX, selectedY) {
@@ -116,8 +129,6 @@ async function showScatterPlot(carsData, selectedX, selectedY) {
     var y = d3.scaleLinear().domain([rangeY.min, rangeY.max]).range([height, 0]);
     svg.append("g").attr("class", "y axis").call(d3.axisLeft(y));
 
-    let color = "#009900";
-
     let carSvg = await d3.xml("./res/car.svg");
     let cars = svg
         .append("svg")
@@ -126,21 +137,26 @@ async function showScatterPlot(carsData, selectedX, selectedY) {
         .enter()
         .append(() => carSvg.documentElement.cloneNode(true))
         .attr("xlink:href", "./res/car.svg")
-        .attr("x", (d) => x(d[selectedX]))
-        .attr("y", (d) => y(d[selectedY]))
+        .attr("x", (d) => x(d[selectedX]) - 10)
+        .attr("y", (d) => y(d[selectedY]) - 10)
         .attr("class", "cars")
         .attr("width", 20)
         .attr("height", 20)
         .attr("opacity", 0.2)
-        .style("fill", color);
+        .style("fill", getColorForCar);
 
     return { x, y, width, height, svg, cars };
+}
+
+function getColorForCar(car) {
+    let colors = { origin: { European: "blue", Japanese: "red", American: "green" }, manufacturer: { amc: "0f854b" } };
+    return colors[selectedGlobal][selectedGlobal === "origin" ? car.origin : car.manufacturer];
 }
 
 function getRange(selectedX, selectedY, carsData) {
     let rangeX = { min: carsData[0][selectedX], max: carsData[0][selectedX] };
     let rangeY = { min: carsData[0][selectedY], max: carsData[0][selectedY] };
-    let padding = { year: 1, horsepower: 10, mpg: 10, cylinders: 1, displacement: 10, weight: 10, acceleration: 10 };
+    let padding = { year: 1, horsepower: 10, mpg: 10, cylinders: 1, displacement: 10, weight: 100, acceleration: 10 };
     carsData.forEach((car) => {
         if (car[selectedX] < rangeX.min) rangeX.min = car[selectedX];
         if (car[selectedX] > rangeX.max) rangeX.max = car[selectedX];

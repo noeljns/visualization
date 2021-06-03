@@ -4,6 +4,15 @@
     <head>
         <meta charset="utf-8" />
 
+        <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+        <script>
+            if (!window.customElements) {
+                document.write("<!--");
+            }
+        </script>
+        <script src="../node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"></script>
+        <!-- ! DO NOT REMOVE THIS COMMENT, WE NEED ITS CLOSING MARKER -->
+
         <title>Übung 3</title>
         <script src="https://d3js.org/d3.v5.js"></script>
         <script src="index.js"></script>
@@ -14,5 +23,6 @@
         <div id="scatter-plot"></div>
         <vaadin-combo-box id="combo-x" value="year"></vaadin-combo-box>
         <vaadin-combo-box id="combo-global" value="origin"></vaadin-combo-box>
+        <origin-checkboxes id="originCheckboxes"></origin-checkboxes>
     </body>
 </html>
