@@ -7,7 +7,7 @@ template.innerHTML = `
 <vaadin-checkbox-group label="Manufacturer">
   <vaadin-checkbox value="amc" >Amc (29)</vaadin-checkbox>
   <vaadin-checkbox value="audi" >Audi (7)</vaadin-checkbox>
-  <vaadin-checkbox value="bMW" >BMW (x)</vaadin-checkbox>
+  <vaadin-checkbox value="bmw" >BMW (x)</vaadin-checkbox>
   <vaadin-checkbox value="buick" >Buick (x)</vaadin-checkbox>
   <vaadin-checkbox value="cadillac" >Cadillac (x)</vaadin-checkbox>
   <vaadin-checkbox value="capri" >Capri (x)</vaadin-checkbox>
@@ -34,7 +34,7 @@ template.innerHTML = `
   <vaadin-checkbox value="toyota" >Toyota (x)</vaadin-checkbox>
   <vaadin-checkbox value="triumph" >Triumph (x)</vaadin-checkbox>
   <vaadin-checkbox value="volvo" >Volvo (x)</vaadin-checkbox>
-  <vaadin-checkbox value="vW" >VW (x)</vaadin-checkbox>
+  <vaadin-checkbox value="vw" >VW (x)</vaadin-checkbox>
 </vaadin-checkbox-group>
 </div>
     `;
@@ -46,7 +46,7 @@ class OriginCheckboxes extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
         this.checkboxGroup = this.shadowRoot.querySelector("vaadin-checkbox-group");
-        this.checkboxGroup.value = ["amc", "audi", "bmw", "vw"];
+        this.checkboxGroup.value = ["audi"];
         this.checkboxGroup.addEventListener("value-changed", () => {
             this.dispatchEvent(
                 new CustomEvent("manufacturer-changed", { detail: { selectedManufacturers: this.checkboxGroup.value } })
