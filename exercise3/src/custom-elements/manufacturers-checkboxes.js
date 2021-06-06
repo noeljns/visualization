@@ -52,20 +52,17 @@ class OriginCheckboxes extends HTMLElement {
                 new CustomEvent("manufacturer-changed", { detail: { selectedManufacturers: this.checkboxGroup.value } })
             );
         });
+        this.checkboxes = this.shadowRoot.querySelectorAll('vaadin-checkbox');
     }
 
-    static get observedAttributes() {
-        return ["selectedManufacturers"];
+    selectAll() {
+        this.checkboxes.forEach(function(checkbox) {
+            checkbox.checked = true;
+          });
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue !== newValue) {
-            switch (name) {
-                case "selectedManufacturers":
-                    this.checkboxGroup = newValue;
-                    break;
-            }
-        }
+    unselectAll() {
+        this.checkboxGroup.value = [];
     }
 }
 

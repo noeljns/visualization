@@ -1,5 +1,6 @@
 import axios from "axios";
 import "@vaadin/vaadin-combo-box";
+import "@vaadin/vaadin-checkbox";
 import "./custom-elements/origin-checkboxes";
 import "./custom-elements/manufacturers-checkboxes";
 
@@ -83,6 +84,16 @@ function initUI() {
         selectedY = evt.detail.value;
         updateScatterPlot(selectedX, selectedY, carsData, scatterPlot);
         updateComboboxItems("combo-x", previouslySelectedY, selectedY);
+    });
+
+    let selectAll = document.getElementById("select-all");
+    selectAll.addEventListener("checked-changed", (evt) => {
+        if(selectAll.checked) {
+            selectedGlobal == "origin" ? originCheckboxes.selectAll() : manufacturerCheckboxes.selectAll();
+        }
+        else {
+            selectedGlobal == "origin" ? originCheckboxes.unselectAll() : manufacturerCheckboxes.unselectAll();
+        }
     });
 }
 

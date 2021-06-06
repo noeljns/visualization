@@ -27,19 +27,14 @@ class OriginCheckboxes extends HTMLElement {
         });
     }
 
-    static get observedAttributes() {
-        return ["selectedOrigins"];
+    selectAll() {
+        this.checkboxGroup.value = ["European", "Japanese", "American"];
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue !== newValue) {
-            switch (name) {
-                case "selectedOrigins":
-                    this.checkboxGroup = newValue;
-                    break;
-            }
-        }
+    unselectAll() {
+        this.checkboxGroup.value = [];
     }
+
 }
 
 customElements.define("origin-checkboxes", OriginCheckboxes);
