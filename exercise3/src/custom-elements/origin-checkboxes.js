@@ -5,9 +5,9 @@ const template = document.createElement("template");
 template.innerHTML = `
 <div>
 <vaadin-checkbox-group label="Origin">
-  <vaadin-checkbox value="European" >European</vaadin-checkbox>
-  <vaadin-checkbox value="Japanese" >Japanese</vaadin-checkbox>
-  <vaadin-checkbox value="American" >American</vaadin-checkbox>
+<vaadin-checkbox value="American" style="--lumo-primary-color: green; color: green;">American (245)</vaadin-checkbox>
+    <vaadin-checkbox value="European" style="--lumo-primary-color: blue; color: blue;">European (68)</vaadin-checkbox>
+    <vaadin-checkbox value="Japanese" style="--lumo-primary-color: red; color: red;">Japanese (79)</vaadin-checkbox>
 </vaadin-checkbox-group>
 </div>
     `;

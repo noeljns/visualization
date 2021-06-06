@@ -11,6 +11,7 @@ let selectedGlobal = "origin";
 let selectedOrigins = ["European", "Japanese", "American"];
 let selectedManufacturers = ["audi"];
 let selectAll;
+let noMouseClick = false;
 
 function initUI() {
     let comboGlobal = document.getElementById("combo-global");
@@ -25,7 +26,6 @@ function initUI() {
     let scatterPlot, carsData;
     let selectedX = "year";
     let selectedY = "horsepower";
-    let noMouseClick = false;
 
     let originCheckboxes = document.getElementById("originCheckboxes");
     originCheckboxes.addEventListener("origin-changed", (evt) => {
@@ -83,8 +83,13 @@ function initUI() {
                     };
                 });
             console.log(carsData);
-            let origins = carsData.map((el) => el.origin).sort();
+            let origins = carsData.map((el) => el.manufacturer).sort();
             console.log(origins);
+            var counts = {};
+            origins.forEach((x) => {
+                counts[x] = (counts[x] || 0) + 1;
+            });
+            console.log(counts);
             scatterPlot = await showScatterPlot(carsData, selectedX, selectedY);
         })
         .then(() => {
@@ -125,6 +130,7 @@ function showSelectedGlobalCheckboxes(originCheckboxes, manufacturerCheckboxes) 
         originCheckboxes.style.display = "none";
         manufacturerCheckboxes.style.display = "block";
     }
+    selectAll.checked = false;
     selectAll.checked = true;
 }
 
@@ -148,6 +154,7 @@ function updateScatterPlot(selectedX, selectedY, carsData, scatterPlot) {
     cars.transition(t)
         .attr("x", (d) => x(d[selectedX]) - 10)
         .attr("y", (d) => y(d[selectedY]) - 10)
+        .style("fill", getColorForCar)
         .attr("display", (d) => {
             if (selectedGlobal === "origin") {
                 return selectedOrigins.indexOf(d.origin) >= 0 ? "block" : "none";
@@ -207,36 +214,35 @@ function getColorForCar(car) {
     let colors = {
         origin: { European: "blue", Japanese: "red", American: "green" },
         manufacturer: {
-            amc: "brown",
-            audi: "yellow",
-            bmw: "#0f854b",
-            buick: "#0f854b",
-            cadillac: "#0f854b",
-            capri: "#0f854b",
-            chevrolet: "#0f854b",
-            chrysler: "#0f854b",
-            citroen: "#0f854b",
-            datsun: "#0f854b",
-            dodge: "#0f854b",
-            fiat: "#0f854b",
-            ford: "#0f854b",
-            hi: "#0f854b",
-            honda: "#0f854b",
-            mazda: "#0f854b",
-            mercedes: "#0f854b",
-            mercury: "#0f854b",
-            nissan: "#0f854b",
-            oldsmobile: "#0f854b",
-            peugot: "#0f854b",
-            plymouth: "#0f854b",
-            pontiac: "#0f854b",
-            renault: "#0f854b",
-            saat: "#0f854b",
-            subaru: "#0f854b",
-            toyota: "#0f854b",
-            triumph: "#0f854b",
-            volvo: "#0f854b",
-            vw: "#0f854b",
+            amc: "#118244",
+            audi: "#ee9bc7",
+            bmw: "#f55145",
+            buick: "#71490c",
+            cadillac: "#3dd9f0",
+            capri: "#1c6391",
+            chevrolet: "#9d0456",
+            chrysler: "#56079e",
+            datsun: "#927b83",
+            dodge: "#6afcb1",
+            fiat: "#b49870",
+            ford: "#93b1f7",
+            hi: "#ee367e",
+            honda: "#560408",
+            mazda: "#889291",
+            mercedes: "#223b11",
+            mercury: "#53c50d",
+            nissan: "#485dd0",
+            oldsmobile: "#493f4a",
+            peugot: "#a6bda3",
+            plymouth: "#61615f",
+            pontiac: "#b50f0f",
+            renault: "#6e7b09",
+            saab: "#1bb899",
+            subaru: "#f33af7",
+            toyota: "#fca7a0",
+            triumph: "#f9a727",
+            volvo: "#981f89",
+            vw: "#040227",
         },
     };
     return colors[selectedGlobal][selectedGlobal === "origin" ? car.origin : car.manufacturer];
