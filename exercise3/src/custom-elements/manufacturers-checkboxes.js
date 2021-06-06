@@ -45,20 +45,33 @@ class OriginCheckboxes extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
+        this.checkedAll = false;
+
         this.checkboxGroup = this.shadowRoot.querySelector("vaadin-checkbox-group");
         this.checkboxGroup.value = ["audi"];
         this.checkboxGroup.addEventListener("value-changed", () => {
+            let checkedAll = true;
+            this.checkboxes.forEach((checkbox) => {
+                if (!checkbox.checked) {
+                    checkedAll = false;
+                }
+            });
+            this.checkedAll = checkedAll;
             this.dispatchEvent(
-                new CustomEvent("manufacturer-changed", { detail: { selectedManufacturers: this.checkboxGroup.value } })
+                new CustomEvent("manufacturer-changed", {
+                    detail: { selectedManufacturers: this.checkboxGroup.value, checkedAll: this.checkedAll },
+                })
             );
         });
-        this.checkboxes = this.shadowRoot.querySelectorAll('vaadin-checkbox');
+        this.checkboxes = this.shadowRoot.querySelectorAll("vaadin-checkbox");
     }
 
     selectAll() {
-        this.checkboxes.forEach(function(checkbox) {
-            checkbox.checked = true;
-          });
+        if (!this.checkedAll) {
+            this.checkboxes.forEach(function (checkbox) {
+                checkbox.checked = true;
+            });
+        }
     }
 
     unselectAll() {

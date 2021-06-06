@@ -18,23 +18,31 @@ class OriginCheckboxes extends HTMLElement {
         this.attachShadow({ mode: "open" });
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
+        this.checkedAll = false;
+
         this.checkboxGroup = this.shadowRoot.querySelector("vaadin-checkbox-group");
         this.checkboxGroup.value = ["European", "Japanese", "American"];
         this.checkboxGroup.addEventListener("value-changed", () => {
+            if (["European", "Japanese", "American"].every((i) => this.checkboxGroup.value.includes(i))) {
+                this.checkedAll = true;
+            } else {
+                this.checkedAll = false;
+            }
             this.dispatchEvent(
-                new CustomEvent("origin-changed", { detail: { selectedOrigins: this.checkboxGroup.value } })
+                new CustomEvent("origin-changed", {
+                    detail: { selectedOrigins: this.checkboxGroup.value, checkedAll: this.checkedAll },
+                })
             );
         });
     }
 
     selectAll() {
-        this.checkboxGroup.value = ["European", "Japanese", "American"];
+        if (!this.checkedAll) this.checkboxGroup.value = ["European", "Japanese", "American"];
     }
 
     unselectAll() {
         this.checkboxGroup.value = [];
     }
-
 }
 
 customElements.define("origin-checkboxes", OriginCheckboxes);

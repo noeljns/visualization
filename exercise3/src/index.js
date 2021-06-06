@@ -10,6 +10,7 @@ window.addEventListener("load", () => {
 let selectedGlobal = "origin";
 let selectedOrigins = ["European", "Japanese", "American"];
 let selectedManufacturers = ["audi"];
+let selectAll;
 
 function initUI() {
     let comboGlobal = document.getElementById("combo-global");
@@ -19,24 +20,41 @@ function initUI() {
     let comboY = document.getElementById("combo-y");
     comboY.items = ["mpg", "cylinders", "displacement", "horsepower", "weight", "acceleration"];
 
+    selectAll = document.getElementById("select-all");
+
     let scatterPlot, carsData;
     let selectedX = "year";
     let selectedY = "horsepower";
+    let noMouseClick = false;
 
     let originCheckboxes = document.getElementById("originCheckboxes");
     originCheckboxes.addEventListener("origin-changed", (evt) => {
         selectedOrigins = evt.detail.selectedOrigins;
+        if (evt.detail.checkedAll && !selectAll.checked) {
+            noMouseClick = true;
+            selectAll.checked = true;
+        } else if (!evt.detail.checkedAll && selectAll.checked) {
+            noMouseClick = true;
+            selectAll.checked = false;
+        }
         updateScatterPlot(selectedX, selectedY, carsData, scatterPlot);
     });
 
     let manufacturerCheckboxes = document.getElementById("manufacturerCheckboxes");
     manufacturerCheckboxes.addEventListener("manufacturer-changed", (evt) => {
         selectedManufacturers = evt.detail.selectedManufacturers;
+        if (evt.detail.checkedAll && !selectAll.checked) {
+            noMouseClick = true;
+            selectAll.checked = true;
+        } else if (!evt.detail.checkedAll && selectAll.checked) {
+            noMouseClick = true;
+            selectAll.checked = false;
+        }
         updateScatterPlot(selectedX, selectedY, carsData, scatterPlot);
     });
 
     showSelectedGlobalCheckboxes(originCheckboxes, manufacturerCheckboxes);
-    
+
     comboGlobal.addEventListener("selected-item-changed", (evt) => {
         selectedGlobal = evt.detail.value;
         showSelectedGlobalCheckboxes(originCheckboxes, manufacturerCheckboxes);
@@ -86,26 +104,28 @@ function initUI() {
         updateComboboxItems("combo-x", previouslySelectedY, selectedY);
     });
 
-    let selectAll = document.getElementById("select-all");
     selectAll.addEventListener("checked-changed", (evt) => {
-        if(selectAll.checked) {
-            selectedGlobal == "origin" ? originCheckboxes.selectAll() : manufacturerCheckboxes.selectAll();
-        }
-        else {
-            selectedGlobal == "origin" ? originCheckboxes.unselectAll() : manufacturerCheckboxes.unselectAll();
+        if (!noMouseClick) {
+            if (selectAll.checked) {
+                selectedGlobal == "origin" ? originCheckboxes.selectAll() : manufacturerCheckboxes.selectAll();
+            } else {
+                selectedGlobal == "origin" ? originCheckboxes.unselectAll() : manufacturerCheckboxes.unselectAll();
+            }
+        } else {
+            noMouseClick = false;
         }
     });
 }
 
 function showSelectedGlobalCheckboxes(originCheckboxes, manufacturerCheckboxes) {
-    if(selectedGlobal == "origin") {
+    if (selectedGlobal == "origin") {
         originCheckboxes.style.display = "block";
         manufacturerCheckboxes.style.display = "none";
-    }
-    else {
+    } else {
         originCheckboxes.style.display = "none";
-        manufacturerCheckboxes.style.display = "block";      
+        manufacturerCheckboxes.style.display = "block";
     }
+    selectAll.checked = true;
 }
 
 function updateComboboxItems(tagNameOfOtherBox, previouslySelected, selected) {
@@ -184,7 +204,41 @@ async function showScatterPlot(carsData, selectedX, selectedY) {
 }
 
 function getColorForCar(car) {
-    let colors = { origin: { European: "blue", Japanese: "red", American: "green" }, manufacturer: { amc: "brown", audi: "yellow", bmw: "#0f854b", buick: "#0f854b", cadillac: "#0f854b", capri: "#0f854b", chevrolet: "#0f854b", chrysler: "#0f854b", citroen: "#0f854b", datsun: "#0f854b", dodge: "#0f854b", fiat: "#0f854b", ford: "#0f854b", hi: "#0f854b", honda: "#0f854b", mazda: "#0f854b", mercedes: "#0f854b", mercury: "#0f854b", nissan: "#0f854b", oldsmobile: "#0f854b", peugot: "#0f854b", plymouth: "#0f854b", pontiac: "#0f854b", renault: "#0f854b", saat: "#0f854b", subaru: "#0f854b", toyota: "#0f854b", triumph: "#0f854b", volvo: "#0f854b", vw: "#0f854b"}};
+    let colors = {
+        origin: { European: "blue", Japanese: "red", American: "green" },
+        manufacturer: {
+            amc: "brown",
+            audi: "yellow",
+            bmw: "#0f854b",
+            buick: "#0f854b",
+            cadillac: "#0f854b",
+            capri: "#0f854b",
+            chevrolet: "#0f854b",
+            chrysler: "#0f854b",
+            citroen: "#0f854b",
+            datsun: "#0f854b",
+            dodge: "#0f854b",
+            fiat: "#0f854b",
+            ford: "#0f854b",
+            hi: "#0f854b",
+            honda: "#0f854b",
+            mazda: "#0f854b",
+            mercedes: "#0f854b",
+            mercury: "#0f854b",
+            nissan: "#0f854b",
+            oldsmobile: "#0f854b",
+            peugot: "#0f854b",
+            plymouth: "#0f854b",
+            pontiac: "#0f854b",
+            renault: "#0f854b",
+            saat: "#0f854b",
+            subaru: "#0f854b",
+            toyota: "#0f854b",
+            triumph: "#0f854b",
+            volvo: "#0f854b",
+            vw: "#0f854b",
+        },
+    };
     return colors[selectedGlobal][selectedGlobal === "origin" ? car.origin : car.manufacturer];
 }
 

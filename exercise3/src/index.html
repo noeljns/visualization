@@ -18,12 +18,18 @@
         <script src="index.js"></script>
     </head>
 
+    <style>
+        body {
+            font-family: var(--lumo-font-family);
+        }
+    </style>
+
     <body>
         <vaadin-combo-box id="combo-y" value="horsepower"></vaadin-combo-box>
         <div id="scatter-plot"></div>
         <vaadin-combo-box id="combo-x" value="year"></vaadin-combo-box>
         <vaadin-combo-box id="combo-global" value="origin"></vaadin-combo-box>
-        <vaadin-checkbox id="select-all">Select all</vaadin-checkbox>
+        <vaadin-checkbox id="select-all" checked>Select all</vaadin-checkbox>
         <origin-checkboxes id="originCheckboxes"></origin-checkboxes>
         <manufacturer-checkboxes id="manufacturerCheckboxes"></manufacturer-checkboxes>
     </body>
