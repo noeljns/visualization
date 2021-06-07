@@ -12,6 +12,7 @@ let selectedOrigins = ["European", "Japanese", "American"];
 let selectedManufacturers = ["audi"];
 let selectAll;
 let noMouseClick = false;
+let carInfo = d3.select("body").append("div").attr("class", "car-info").style("opacity", 0);
 
 function initUI() {
     let comboGlobal = document.getElementById("combo-global");
@@ -82,6 +83,9 @@ function initUI() {
                         origin: tabs[9].replace("\r", ""),
                     };
                 });
+            // FIXME: convert mpg from miles per gallon to km per liter
+            // FIXME: convert displacement from cubic inches to ccm
+            // FIXME: convert weight from pounds to kg
             console.log(carsData);
             let origins = carsData.map((el) => el.manufacturer).sort();
             console.log(origins);
@@ -205,9 +209,22 @@ async function showScatterPlot(carsData, selectedX, selectedY) {
         .attr("width", 20)
         .attr("height", 20)
         .attr("opacity", 0.2)
-        .style("fill", getColorForCar);
+        .style("fill", getColorForCar)
+        .on("mouseover", openInfoAboutCar)
+        .on("mouseout", closeInfoAboutCar);
 
     return { x, y, width, height, svg, cars };
+}
+
+function openInfoAboutCar(car) {
+    carInfo.transition().duration(50).style("opacity", 1)
+    carInfo.html(`<p>Detaillierte Informationen</p><p>Name: ${car.car}</p><p>Hersteller: ${car.manufacturer}</p><p>Verbrauch: ${car.mpg} km/l</p><p>Zylinder: ${car.cylinders}</p><p>Hubraum: ${car.displacement} ccm</p><p>PS: ${car.horsepower}</p><p>Gewicht: ${car.weight} kg</p><p>Beschleunigung: ${car.acceleration}</p><p>Baujahr: 19${car.year}</p><p>Herkunft: ${car.origin}</p>`).style("left", (d3.event.pageX + 10) + "px")
+                    .style("top", (d3.event.pageY - 15) + "px")
+                    .style("border-color", getColorForCar(car));
+}
+
+function closeInfoAboutCar(car) {
+    carInfo.transition().duration(50).style("opacity", 0)
 }
 
 function getColorForCar(car) {
@@ -245,6 +262,7 @@ function getColorForCar(car) {
             vw: "#040227",
         },
     };
+
     return colors[selectedGlobal][selectedGlobal === "origin" ? car.origin : car.manufacturer];
 }
 
