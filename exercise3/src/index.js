@@ -215,7 +215,7 @@ function openInfoAboutCar(car) {
     carInfo.transition().duration(50).style("opacity", 1);
     carInfo
         .html(
-            `<p>Detaillierte Informationen</p><p>Name: ${car.car}</p><p>Hersteller: ${car.manufacturer}</p><p>Verbrauch: ${car.mpg} km/l</p><p>Zylinder: ${car.cylinders}</p><p>Hubraum: ${car.displacement} ccm</p><p>PS: ${car.horsepower}</p><p>Gewicht: ${car.weight} kg</p><p>Beschleunigung: ${car.acceleration}</p><p>Baujahr: 19${car.year}</p><p>Herkunft: ${car.origin}</p>`
+            `<b>Detailled information</b><p>Name: ${car.car}</p><p>Manufacturer: ${car.manufacturer}</p><p>MPG: ${car.mpg} km/l</p><p>Cylinders: ${car.cylinders}</p><p>Displacement: ${car.displacement} ccm</p><p>Horsepower: ${car.horsepower}</p><p>Weight: ${car.weight} kg</p><p>Acceleration: ${car.acceleration}</p><p>Year: 19${car.year}</p><p>Origin: ${car.origin}</p>`
         )
         .style("left", d3.event.pageX + 10 + "px")
         .style("top", d3.event.pageY - 15 + "px")
