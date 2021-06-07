@@ -83,17 +83,12 @@ function initUI() {
                         origin: tabs[9].replace("\r", ""),
                     };
                 });
-            // FIXME: convert mpg from miles per gallon to km per liter
-            // FIXME: convert displacement from cubic inches to ccm
-            // FIXME: convert weight from pounds to kg
-            console.log(carsData);
-            let origins = carsData.map((el) => el.manufacturer).sort();
-            console.log(origins);
-            var counts = {};
-            origins.forEach((x) => {
-                counts[x] = (counts[x] || 0) + 1;
+            carsData = carsData.map((car) => {
+                car.mpg = Math.round((car.mpg / 2.352) * 100) / 100;
+                car.displacement = Math.round(car.displacement * 16.387 * 100) / 100;
+                car.weight = Math.round((car.weight / 2.2052) * 100) / 100;
+                return car;
             });
-            console.log(counts);
             scatterPlot = await showScatterPlot(carsData, selectedX, selectedY);
         })
         .then(() => {
@@ -217,14 +212,18 @@ async function showScatterPlot(carsData, selectedX, selectedY) {
 }
 
 function openInfoAboutCar(car) {
-    carInfo.transition().duration(50).style("opacity", 1)
-    carInfo.html(`<p>Detaillierte Informationen</p><p>Name: ${car.car}</p><p>Hersteller: ${car.manufacturer}</p><p>Verbrauch: ${car.mpg} km/l</p><p>Zylinder: ${car.cylinders}</p><p>Hubraum: ${car.displacement} ccm</p><p>PS: ${car.horsepower}</p><p>Gewicht: ${car.weight} kg</p><p>Beschleunigung: ${car.acceleration}</p><p>Baujahr: 19${car.year}</p><p>Herkunft: ${car.origin}</p>`).style("left", (d3.event.pageX + 10) + "px")
-                    .style("top", (d3.event.pageY - 15) + "px")
-                    .style("border-color", getColorForCar(car));
+    carInfo.transition().duration(50).style("opacity", 1);
+    carInfo
+        .html(
+            `<p>Detaillierte Informationen</p><p>Name: ${car.car}</p><p>Hersteller: ${car.manufacturer}</p><p>Verbrauch: ${car.mpg} km/l</p><p>Zylinder: ${car.cylinders}</p><p>Hubraum: ${car.displacement} ccm</p><p>PS: ${car.horsepower}</p><p>Gewicht: ${car.weight} kg</p><p>Beschleunigung: ${car.acceleration}</p><p>Baujahr: 19${car.year}</p><p>Herkunft: ${car.origin}</p>`
+        )
+        .style("left", d3.event.pageX + 10 + "px")
+        .style("top", d3.event.pageY - 15 + "px")
+        .style("border-color", getColorForCar(car));
 }
 
 function closeInfoAboutCar(car) {
-    carInfo.transition().duration(50).style("opacity", 0)
+    carInfo.transition().duration(50).style("opacity", 0);
 }
 
 function getColorForCar(car) {
@@ -269,7 +268,7 @@ function getColorForCar(car) {
 function getRange(selectedX, selectedY, carsData) {
     let rangeX = { min: carsData[0][selectedX], max: carsData[0][selectedX] };
     let rangeY = { min: carsData[0][selectedY], max: carsData[0][selectedY] };
-    let padding = { year: 1, horsepower: 10, mpg: 10, cylinders: 1, displacement: 10, weight: 100, acceleration: 10 };
+    let padding = { year: 1, horsepower: 10, mpg: 2, cylinders: 1, displacement: 100, weight: 100, acceleration: 10 };
     carsData.forEach((car) => {
         if (car[selectedX] < rangeX.min) rangeX.min = car[selectedX];
         if (car[selectedX] > rangeX.max) rangeX.max = car[selectedX];
